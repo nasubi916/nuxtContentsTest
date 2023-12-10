@@ -20,12 +20,14 @@ const submit = async () => {
 </script>
 
 <template>
-  <div class="p-2 border bg-white dark:bg-black dark:border-gray-700 rounded">
-    <form>
-      <input type="text" v-model="query" />
-      <button type="submit" @click.prevent="submit()">Submit</button>
-      <p>{{ book }}</p>
-    </form>
-    <slot />
+  <div class="dark">
+    <div class="p-2 border bg-white dark:bg-gray-400 rounded">
+      <form>
+        <input type="text" v-model="query" class="rounded-md mx-2"/>
+        <button type="submit" @click.prevent="submit()">Submit</button>
+        <p>{{ book }}</p>
+      </form>
+      <slot />
+    </div>
   </div>
 </template>
