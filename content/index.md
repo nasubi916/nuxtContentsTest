@@ -1,2 +1,2 @@
-# Hello Content
+# This page is Home
 # test
