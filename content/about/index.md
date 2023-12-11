@@ -1,7 +1,4 @@
-# Hello Content
+# This page is About
 # about
 ::card
-::
-
-::bookshelf
 ::
