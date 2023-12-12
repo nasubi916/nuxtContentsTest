@@ -4,41 +4,49 @@ const books = ref([])
 
 
 booksJSON.ISBN.forEach(async (isbn: string) => {
-  const { data, pending, error, refresh } = await useFetch(`get?isbn=${isbn}`, {
-    method: 'GET',
-    baseURL: "https://api.openbd.jp/v1",
-  })
-  if (error.value) {
-    console.log(error.value)
+  try {
+    const { data, pending, error, refresh } = await useFetch(`v1/get`, {
+      method: 'GET',
+      baseURL: "https://api.openbd.jp/",
+      params: {
+        isbn: isbn
+      }
+    })
+    if (error.value) throw error.value
+    books.value.push(data.value[0])
+  } catch (e) {
+    console.log(e)
   }
-  books.value.push(data.value[0]?.summary)
 })
 </script>
 <template>
   <div class="dark">
-    <div v-for="book in books">
-      <div class="p-2 border bg-white dark:bg-gray-400 rounded">
-        <div class="flex flex-col">
-          <div class="flex flex-row">
+    <div class="flex flex-row flex-wrap items-end">
+      <div v-for="book in books">
+        <div class="p-2 w-40 border bg-white dark:bg-gray-400 rounded">
+          <div class="flex flex-col">
             <div class="flex flex-col">
-              <span class="text-xl">{{ " タイトル: " + book?.title }}</span>
-              <span class="">{{ " 著者: " + book?.author }}</span>
-              <span class="">{{ " ページ数: " + book?.cover }}</span>
-              <span class="">{{ " ISBN: " + book?.isbn }}</span>
-              <span class="">{{ " 出版社: " + book?.publisher }}</span>
-              <span class="">{{ " 出版日: " + book?.pubdate }}</span>
+              <span class="text-xl">{{ book?.summary?.title }}</span>
+              <span class="">{{ book?.summary?.author }}</span>
+              <span class="">{{ book?.summary?.cover }}</span>
+              <span class="">{{ book?.summary?.isbn }}</span>
+              <span class="">{{ " 出版日: " + book?.summary?.pubdate }}</span>
+              <span class="">{{ book?.summary?.series }}</span>
             </div>
-          </div>
-          <div class="flex flex-row">
-            <div class="flex flex-col">
-              <span class="">{{ " 価格: " + book?.price }}</span>
-            </div>
-            <div class="flex flex-col">
-              <span class="">{{ " シリーズ: " + book?.series }}</span>
+            <div class="flex flex-row">
+              <span class="">{{ book?.summary?.publisher }}</span>
+              <!-- <span class="">{{ book?.summary?.price +"¥" }}</span> -->
             </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div v-for="book in books">
+      <p>
+        {{ book?.onix }}
+      </p>
+      <p>-----------------------------------------------</p>
     </div>
   </div>
 </template>
