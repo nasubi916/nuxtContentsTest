@@ -4,10 +4,7 @@ const user = useSupabaseUser()
 
 <template>
   <div class="container">
-    <div v-if="user">
-      <Account />
-      <Bookshelf />
-    </div>
+    <Account v-if="user" />
     <Auth v-else />
   </div>
 </template>
