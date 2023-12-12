@@ -1,35 +1,47 @@
 <script setup>
-const supabase = useSupabaseClient()
+const supabase = useSupabaseClient();
 
-const loading = ref(false)
-const email = ref('')
-
-const handleLogin = async () => {
+const loginWithGithub = async () => {
+  const loading = ref()
   try {
-    loading.value = true
-    const { error } = await supabase.auth.signInWithOtp({ email: email.value })
-    if (error) throw error
-    alert('Check your email for the login link!')
+    loading.value = true;
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+    });
+    if (error) throw error;
   } catch (error) {
     alert(error.error_description || error.message)
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
+const loginWithGoogle = async () => {
+  const loading = ref()
+  try {
+    loading.value = true;
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+    if (error) throw error;
+  } catch (error) {
+    alert(error.error_description || error.message)
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 
 <template>
-  <div class="container w-1/2">
-    <form class="border-2 border-gray-600 bg-gray-400" @submit.prevent="handleLogin">
-      <div class="col-6 form-widget">
-        <p class="text-lg">Supabase + Nuxt 3</p>
-        <p>Sign in via magic link with your email below</p>
-        <div>
-          <input type="email" placeholder="Your email" v-model="email" />
-          <input type="submit" class="border-2 border-blue-600 bg-blue-400 rounded-lg m-1"
-            :value="loading ? 'Loading' : 'Send magic link'" :disabled="loading" />
-        </div>
-      </div>
-    </form>
+  <div class="container flex justify-normal">
+    <button @click="loginWithGithub()" class="bg-blue-400 p-2 rounded-lg flex flex-row items-center">
+      <img src="https://github.com/github.png" alt="github" class="w-12 h-12 rounded-full" />
+      <span v-if="loading">Loading ...</span>
+      <span v-else>Sign in with GitHub</span>
+    </button>
+    <button @click="loginWithGoogle()" class="bg-red-400 p-2 rounded-lg  flex flex-row items-center">
+      <img src="https://github.com/google.png" alt="google" class="w-12 h-12 rounded-full" />
+      <span v-if="loading">Loading ...</span>
+      <span v-else>Sign in with Google</span>
+    </button>
   </div>
 </template>

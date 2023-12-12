@@ -1,82 +1,56 @@
 <script setup>
-const supabase = useSupabaseClient()
-
-const loading = ref(true)
-const username = ref('')
-const avatar_path = ref('')
-
-loading.value = true
-const user = useSupabaseUser()
-
-const { data } = await supabase
-  .from('profiles')
-  .select(`username, website, avatar_url`)
-  .eq('id', user.value.id)
-  .single()
-
-if (data) {
-  username.value = data.username
-  avatar_path.value = data.avatar_url
-}
-
-loading.value = false
-
-async function updateProfile() {
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
+const name = computed(
+  () => user?.value.user_metadata.full_name
+);
+const profile = computed(
+  () => user?.value.user_metadata.avatar_url
+);
+const dropBox = ref(false)
+const rootDashboard = async () => {
   try {
-    loading.value = true
-    const user = useSupabaseUser()
-
-    const updates = {
-      id: user.value.id,
-      username: username.value,
-      avatar_url: avatar_path.value,
-      updated_at: new Date(),
-    }
-
-    const { error } = await supabase.from('profiles').upsert(updates, {
-      returning: 'minimal', // Don't return the value after inserting
-    })
-    if (error) throw error
+    await navigateTo('/dashboard');
   } catch (error) {
-    alert(error.message)
-  } finally {
-    loading.value = false
+    alert(error.error_description || error.message)
   }
-}
-
-async function signOut() {
+};
+const logout = async () => {
   try {
-    loading.value = true
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
-    user.value = null
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+    await navigateTo('/login');
   } catch (error) {
-    alert(error.message)
-  } finally {
-    loading.value = false
+    alert(error.error_description || error.message)
   }
-}
+};
 </script>
 
 <template>
-  <div class="container w-1/2">
-    <form  class="border-2 border-gray-600 bg-gray-400" @submit.prevent="updateProfile">
-      <div class="m-1">
-        <label for="email">Email: </label>
-        <input class="border-2 border-gray-600 bg-gray-400" type="text" :value="user.email" disabled />
+  <div v-if="user" class="rounded p-3 flex flex-row items-center bg-white">
+    <button @click="dropBox = !dropBox">
+      <img class="rounded-full w-12 h-12 border-2 border-blue-400" :src="profile" />
+    </button>
+    <div v-if="dropBox"
+      class="absolute top-16 right-0 w-48 bg-white rounded-lg shadow-xl border-2 border-b-2 border-gray-600">
+      <div class="flex flex-col items-center justify-center">
+        <p class="text-lg font-bold text-blue-600 dark:text-gray-400">{{ name }}</p>
+        <div class="border-b-2 border-gray-600 w-full"></div>
+        <button @click="rootDashboard(), dropBox = !dropBox"
+          class="bg-blue-400 hover:bg-blue-500 p-2 items-center w-full h-full">
+          <span>Dashboard</span>
+        </button>
+        <div class="border-b-2 border-gray-600 w-full"></div>
+        <button @click="logout(), dropBox = !dropBox"
+          class="bg-blue-400 hover:bg-blue-500 p-2 items-center w-full h-full">
+          <span>Logout</span>
+        </button>
       </div>
-      <div class="m-1">
-        <label for="username">Username: </label>
-        <input class="border-2 border-gray-600 bg-gray-400" type="text" v-model="username" />
-      </div>
-
-      <div>
-        <input type="submit" class="border-2 border-blue-600 bg-blue-400 rounded-lg m-1"
-          :value="loading ? 'Loading ...' : 'Update'" :disabled="loading" />
-        <button class="border-2 border-blue-600 bg-blue-400 rounded-lg m-1" @click="signOut" :disabled="loading">Sign
-          Out</button>
-      </div>
-
-    </form>
+    </div>
+  </div>
+  <div v-else>
+    <button class="rounded-full w-12 h-12 border-2 border-blue-400">
+      image
+    </button>
   </div>
 </template>
