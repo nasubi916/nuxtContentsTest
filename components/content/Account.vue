@@ -1,13 +1,16 @@
 <script setup>
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
+
+const dropBox = ref(false)
+
 const name = computed(
   () => user?.value.user_metadata.full_name
 );
 const profile = computed(
   () => user?.value.user_metadata.avatar_url
 );
-const dropBox = ref(false)
+
 const rootDashboard = async () => {
   try {
     await navigateTo('/dashboard');
