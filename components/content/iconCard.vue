@@ -1,22 +1,10 @@
-<script setup>
-defineProps < {
-  icon: string,
-  title: string,
-  description: string,
-} > ({
-  icon: {
-    type: String,
-    default: 'svg'
-  },
-  title: {
-    type: String,
-    default: 'Title'
-  },
-  description: {
-    type: String,
-    default: 'Description'
-  }
-})
+<script setup lang="ts">
+defineProps<{
+  icon: { type: string, default: "svg" }
+  title: { type: string, default: "title" }
+  description: { type: string, default: "description" }
+}>()
+
 </script>
 
 <template>
