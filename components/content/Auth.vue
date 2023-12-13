@@ -4,17 +4,18 @@ const supabase = useSupabaseClient();
 const loading = ref(false);
 
 const signInWithOAuth = async (useProvider: Provider) => {
+  const url =  window.location.origin
   const loading = ref()
   try {
     loading.value = true;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: useProvider,
       options: {
-        redirectTo: 'http://localhost:3000/dashboard'
+        redirectTo: url + '/dashboard',
       }
     });
+    console.log(url + '/dashboard')
     if (error) throw error;
-
   } finally {
     loading.value = false;
   }
