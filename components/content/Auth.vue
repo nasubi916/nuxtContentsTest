@@ -11,10 +11,9 @@ const signInWithOAuth = async (useProvider: Provider) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: useProvider,
       options: {
-        redirectTo: url + '/dashboard',
+        redirectTo: url + '/confirm',
       }
     });
-    console.log(url + '/dashboard')
     if (error) throw error;
   } finally {
     loading.value = false;
