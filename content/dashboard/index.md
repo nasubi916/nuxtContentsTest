@@ -7,5 +7,8 @@ title: 'Virtual Bookshelf'
 ::BookAdder
 ::
 
+::BarcodeReader
+::
+
 ::Bookshelf
 ::
