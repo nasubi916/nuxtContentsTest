@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { BookAdder } from '#build/components';
-
 const user = useSupabaseUser()
 </script>
 
