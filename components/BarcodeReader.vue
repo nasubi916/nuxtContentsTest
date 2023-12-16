@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { QrcodeStream } from 'vue-qrcode-reader'
-const isbn = ref<string>();
 const decodedText = ref("");
 
 const onDetect = (detectedCodes: any) => {
-	isbn.value = detectedCodes;
-	console.log(isbn.value);
+	decodedText.value = detectedCodes;
+	console.log(decodedText.value);
 }
 </script>
 
 <template>
 	<div class="flex">
-		<qrcode-stream @detect="onDetect"></qrcode-stream>
-		<p>ISBN: {{ isbn }}</p>
+		<div>
+			<qrcode-stream  v-model="decodedText" />
+		</div>
+		<p>decodedText: {{ decodedText }}</p>
 	</div>
 </template>
