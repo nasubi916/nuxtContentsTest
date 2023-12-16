@@ -38,7 +38,8 @@ onMounted(async () => {
   <div class="dark">
     <div class="flex flex-row flex-wrap items-end">
       <div v-for="book in books">
-        <div v-if="book" class="p-2 w-40 border bg-white dark:bg-gray-400 rounded">
+        <div class="p-1"></div>
+        <div v-if="book" class="p-2 w-40 h-56 border bg-white dark:bg-gray-400 rounded">
           <div class="flex flex-col">
             <div class="flex flex-col">
               <span class="text-xl">{{ book?.summary?.title }}</span>

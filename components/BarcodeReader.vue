@@ -1,23 +1,19 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 const isbn = ref<string>();
+  const decodedText = ref("");
 
-const onDecode = (result: any) => {
-  console.log(result);
-  isbn.value = result
-};
 const onLoaded = () => {
-  console.log("Barcode reader component loaded.");
-};
-const onError = (error: any) => {
-  console.error(error);
+  console.log("loaded");
 };
 
+const onDecode = (text) => {
+  decodedText.value = text;
+};
 </script>
 
 <template>
   <div class="container">
-    <StreamBarcodeReader @decode="onDecode" @loaded="onLoaded"></StreamBarcodeReader>
-    <ImageBarcodeReader @decode="onDecode" @error="onError"></ImageBarcodeReader>
+  <StreamBarcodeReader @decode="onDecode" @loaded="onLoaded"></StreamBarcodeReader>
     <p>ISBN: {{ isbn }}</p>
   </div>
 </template>
