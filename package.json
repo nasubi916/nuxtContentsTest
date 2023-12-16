@@ -11,14 +11,12 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
-    "@nuxtjs/supabase": "^1.1.4",
-    "@types/vue-barcode-reader": "^0.0.3"
+    "@nuxtjs/supabase": "^1.1.4"
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.10.1",
     "nuxt": "^3.8.2",
     "vue": "^3.3.8",
-    "vue-barcode-reader": "^1.0.3",
     "vue-router": "^4.2.5"
   }
 }

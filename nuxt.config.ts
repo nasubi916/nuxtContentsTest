@@ -12,9 +12,9 @@ export default defineNuxtConfig({
       exclude: ['/', '/about', '/about/*'],
     },
   },
-  vue: {
-    compilerOptions: {
-      isCustomElement: (tag) => /^(StreamBarcodeReader|ImageBarcodeReader)$/.test(tag),
-    },
-  },
+  // vue: {
+  //   compilerOptions: {
+  //     isCustomElement: (tag) => /^(StreamBarcodeReader|ImageBarcodeReader)$/.test(tag),
+  //   },
+  // },
 })
