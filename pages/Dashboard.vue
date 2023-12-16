@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import type { BookAdder } from '#build/components';
+
 const user = useSupabaseUser()
 </script>
 
 <template>
-  <div> 
+  <div>
     <p class="text-2xl font-bold">本棚</p>
-    <Bookshelf/>
+    <BookAdder />
+    <Bookshelf />
   </div>
 </template>
