@@ -1,9 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@nuxt/content','@nuxtjs/tailwindcss','@nuxtjs/supabase'],
-  content: {
-  },
+  modules: ['@nuxtjs/tailwindcss','@nuxtjs/supabase'],
   tailwindcss: {},
   supabase: {
     url: process.env.SUPABASE_URL,

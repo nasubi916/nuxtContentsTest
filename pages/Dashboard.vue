@@ -3,8 +3,8 @@ const user = useSupabaseUser()
 </script>
 
 <template>
-  <div class="container">
-    <Account v-if="user" />
-    <Auth v-else />
+  <div> 
+    <p class="text-2xl font-bold">本棚</p>
+    <Bookshelf/>
   </div>
 </template>
