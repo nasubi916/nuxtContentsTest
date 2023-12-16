@@ -5,7 +5,7 @@ const user = useSupabaseUser()
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col">
     <p class="text-2xl font-bold">本棚</p>
     <BookAdder />
     <Bookshelf />

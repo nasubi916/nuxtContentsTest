@@ -1345,6 +1345,16 @@
     "@tufjs/canonical-json" "2.0.0"
     minimatch "^9.0.3"
 
+"@types/dom-webcodecs@^0.1.9":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@types/dom-webcodecs/-/dom-webcodecs-0.1.11.tgz#2e36e5cc71789551f107e2fe15d956845fa19567"
+  integrity sha512-yPEZ3z7EohrmOxbk/QTAa0yonMFkNkjnVXqbGb7D4rMr+F1dGQ8ZUFxXkyLLJuiICPejZ0AZE9Rrk9wUCczx4A==
+
+"@types/emscripten@^1.39.9":
+  version "1.39.10"
+  resolved "https://registry.yarnpkg.com/@types/emscripten/-/emscripten-1.39.10.tgz#da6e58a6171b46a41d3694f812d845d515c77e18"
+  integrity sha512-TB/6hBkYQJxsZHSqyeuO1Jt0AB/bW6G7rHt9g7lML7SOF6lbgcHvw/Lr+69iqN0qxgXLhWKScAon73JNnptuDw==
+
 "@types/estree@*", "@types/estree@^1.0.0":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.5.tgz#a6ce3e556e00fd9895dd872dd172ad0d4bd687f4"
@@ -1801,6 +1811,14 @@ balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
+
+barcode-detector@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/barcode-detector/-/barcode-detector-2.1.1.tgz#733674e629b4837688064bca4e1734fb8ad99730"
+  integrity sha512-yA6gR5u5j22uw2eHSlFGzhYgnnQqx6hc4amDb/r0bKWl2gcDOqVE6SzUE6O87UzJ3ZhjJjM9uG/L9+D705HsKg==
+  dependencies:
+    "@types/dom-webcodecs" "^0.1.9"
+    zxing-wasm "1.0.0-rc.4"
 
 big-integer@^1.6.44:
   version "1.6.52"
@@ -5063,6 +5081,11 @@ scule@^1.0.0, scule@^1.1.0:
   resolved "https://registry.yarnpkg.com/scule/-/scule-1.1.1.tgz#82b4d13bb8c729c15849256e749cee0cb52a4d89"
   integrity sha512-sHtm/SsIK9BUBI3EFT/Gnp9VoKfY6QLvlkvAE6YK7454IF8FSgJEAnJpVdSC7K5/pjI5NfxhzBLW2JAfYA/shQ==
 
+sdp@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/sdp/-/sdp-3.2.0.tgz#8961420552b36663b4d13ddba6f478d1461896a5"
+  integrity sha512-d7wDPgDV3DDiqulJjKiV2865wKsJ34YI+NDREbm+FySq6WuKOikwyNQcm+doLAZ1O6ltdO0SeKle2xMpN3Brgw==
+
 semver@^6.0.0, semver@^6.3.1:
   version "6.3.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
@@ -5952,6 +5975,14 @@ vue-devtools-stub@^0.1.0:
   resolved "https://registry.yarnpkg.com/vue-devtools-stub/-/vue-devtools-stub-0.1.0.tgz#a65b9485edecd4273cedcb8102c739b83add2c81"
   integrity sha512-RutnB7X8c5hjq39NceArgXg28WZtZpGc3+J16ljMiYnFhKvd8hITxSWQSQ5bvldxMDU6gG5mkxl1MTQLXckVSQ==
 
+vue-qrcode-reader@^5.4.1:
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/vue-qrcode-reader/-/vue-qrcode-reader-5.4.1.tgz#0799f88fa8ed973420ce6af13f641beafed0cf49"
+  integrity sha512-jwETIaRdumSCnXOpp0BkpZW8sySNFUfIPNOFa8oHAEmoSSdKK/ub5C1+3vMwokjU8iNERR2v/YhfBdcWDe0s5A==
+  dependencies:
+    barcode-detector "2.1.1"
+    webrtc-adapter "8.2.3"
+
 vue-router@^4.2.5:
   version "4.2.5"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.2.5.tgz#b9e3e08f1bd9ea363fdd173032620bc50cf0e98a"
@@ -5984,6 +6015,13 @@ webpack-virtual-modules@^0.6.0:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/webpack-virtual-modules/-/webpack-virtual-modules-0.6.1.tgz#ac6fdb9c5adb8caecd82ec241c9631b7a3681b6f"
   integrity sha512-poXpCylU7ExuvZK8z+On3kX+S8o/2dQ/SVYueKA0D4WEMXROXgY8Ez50/bQEUmvoSMMrWcrJqCHuhAbsiwg7Dg==
+
+webrtc-adapter@8.2.3:
+  version "8.2.3"
+  resolved "https://registry.yarnpkg.com/webrtc-adapter/-/webrtc-adapter-8.2.3.tgz#85e5e52ea68e808be8d6db85e338aa5c95e80022"
+  integrity sha512-gnmRz++suzmvxtp3ehQts6s2JtAGPuDPjA1F3a9ckNpG1kYdYuHWYpazoAnL9FS5/B21tKlhkorbdCXat0+4xQ==
+  dependencies:
+    sdp "^3.2.0"
 
 whatwg-url@^5.0.0:
   version "5.0.0"
@@ -6105,3 +6143,10 @@ zip-stream@^5.0.1:
     archiver-utils "^4.0.1"
     compress-commons "^5.0.1"
     readable-stream "^3.6.0"
+
+zxing-wasm@1.0.0-rc.4:
+  version "1.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/zxing-wasm/-/zxing-wasm-1.0.0-rc.4.tgz#5161898aa0fef60eb73ed8339e778af530df79bf"
+  integrity sha512-SvVErHUZhzFqpqA2vpwmXeAPa6sgGdUCOkMCd5cMch6L1urZbZCZR8jb2+NI9bCfJRNkQi2ZjME9/NaiUFiSGg==
+  dependencies:
+    "@types/emscripten" "^1.39.9"
