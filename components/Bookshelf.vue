@@ -4,34 +4,28 @@ const user = useSupabaseUser();
 
 const books = ref<string[]>([])
 const newIsbn = ref<string>()
+const user_ISBNs = ref<string[]>([])
 const loading = ref<boolean>(false)
 
-// user.value?.idに一致するデータをsupabaseから取得する
-const { data: users_isbn } = await useAsyncData('users_isbn', async () => {
-  const { data, error } = await client
+onMounted(async () => {
+  // user.value?.idに一致するデータをsupabaseから取得する
+  const { data: usersIsbnData, error: userIsbnError } = await client
     .from('users_isbn')
     .select("*")
-  if (error) throw error
-  return data
-})
-// users_isbn.valueに一致するデータをopenDBから取得する
-onMounted(async () => {
-  try {
-    if (!users_isbn.value) return
-    const { data, pending, error, refresh } = await useFetch("v1/get", {
-      method: 'GET',
-      baseURL: "https://api.openbd.jp",
-      params: {
-        isbn: users_isbn.value.map((isbn: any) => isbn.isbn).join(",")
-      }
-    })
-    if (error.value) throw error.value
-    books.value.push(...data.value)
-  } catch (e) {
-    console.log(e)
-  } finally {
-    loading.value = false
-  }
+  if (userIsbnError) throw userIsbnError
+  user_ISBNs.value.push(...usersIsbnData)
+
+  // users_isbn.valueに一致するデータをopenDBから取得する
+  if (!user_ISBNs.value) return
+  const { data: openDBData, error: openDBError } = await useFetch("v1/get", {
+    method: 'GET',
+    baseURL: "https://api.openbd.jp",
+    params: {
+      isbn: user_ISBNs.value.map((isbn: any) => isbn.isbn).join(",")
+    }
+  })
+  if (openDBError.value) throw openDBError.value
+  books.value.push(...openDBData.value)
 })
 </script>
 <template>

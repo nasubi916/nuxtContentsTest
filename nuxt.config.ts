@@ -1,7 +1,5 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  ssr: false,//true,
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/supabase'],
   tailwindcss: {},
   supabase: {
@@ -12,6 +10,11 @@ export default defineNuxtConfig({
       login: '/login',
       callback: '/confirm',
       exclude: ['/', '/about', '/about/*'],
+    },
+  },
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => /^(StreamBarcodeReader|ImageBarcodeReader)$/.test(tag),
     },
   },
 })

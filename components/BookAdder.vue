@@ -48,6 +48,7 @@ const addBook = async () => {
       <button type="submit" class="bg-blue-400 p-2 rounded-lg flex flex-row items-center">
         <span>本を追加</span>
       </button>
+      <BarcodeReader />
     </form>
   </div>
 </template>

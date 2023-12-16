@@ -1,11 +1,4 @@
 <script setup lang="ts">
-definePageMeta({
-  title: 'Dashboard',
-  description: 'Dashboard',
-  image: 'https://nuxtjs.org/nuxt-card.png',
-  url: 'https://nuxtjs.org'
-})
-
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const name = computed(() => user.value?.user_metadata.full_name);
