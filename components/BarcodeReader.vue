@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { StreamBarcodeReader } from "vue-barcode-reader";
 const isbn = ref<string>();
 
 const onDecode = (result: any) => {
@@ -9,10 +8,16 @@ const onDecode = (result: any) => {
 const onLoaded = () => {
   console.log("Barcode reader component loaded.");
 };
+const onError = (error: any) => {
+  console.error(error);
+};
+
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <StreamBarcodeReader @decode="onDecode" @loaded="onLoaded"></StreamBarcodeReader>
+    <ImageBarcodeReader @decode="onDecode" @error="onError"></ImageBarcodeReader>
+    <p>ISBN: {{ isbn }}</p>
   </div>
 </template>
