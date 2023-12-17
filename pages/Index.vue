@@ -1,5 +1,8 @@
 <template>
-  <main>
+  <div>
     <p class="text-2xl font-bold">本棚</p>
-  </main>
+    <UCard/>
+    <Avatar/>
+    <UButton class="">test</UButton>
+  </div>
 </template>
