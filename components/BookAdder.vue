@@ -1,54 +1,28 @@
 <script setup lang="ts">
-import { useAsyncData } from '#imports';
-
-const client = useSupabaseClient();
-const user = useSupabaseUser();
-
-const newIsbn = ref<string>()
+const { addBook } = useBooks()
+const inputISBN = ref<string>()
 const loading = ref<boolean>(false)
 
+//!連続登録やめろ
 // user.value?.idをキーにしてデータを登録する
-const addBook = async () => {
-  // 未ログインの場合は登録しない
-  if (!user.value?.id) return
-  // 未入力の場合は登録しない
-  if (!newIsbn.value) return
-  // 13桁以外禁止
-  if (newIsbn.value.length !== 13) return
-  //数字以外禁止
-  if (!newIsbn.value.match(/^[0-9]+$/)) return
-  // 既に登録済みの場合は登録しない
-  // if (users_isbn.value?.some((isbn: any) => isbn.isbn === newIsbn.value)) return
-
-  // 登録処理
-  loading.value = true;
-  let { data } = await useAsyncData('users_isbn', async () => {
-    const { data, error } = await client
-      .from('users_isbn')
-      .insert({
-        user_id: user.value?.id,
-        isbn: newIsbn.value
-      })
-      .select("id,user_id,isbn,created_at")
-      .single()
-    console.log(data, user.value?.id)
-    if (error) throw error
-  })
-
+const addBookWrapper = async (newIsbn: string | undefined) => {
+  // ISBNの形式チェック
+  if (newIsbn === undefined || newIsbn.length !== 13 || !newIsbn.match(/^[0-9]+$/)) return
+  loading.value = true
+  addBook(newIsbn)
   loading.value = false
-  return data
 }
-
 </script>
+
 <template>
   <div class="dark flex justify-end">
-    <form @submit.prevent="addBook" class="flex flex-row">
+    <form @submit.prevent="addBookWrapper(inputISBN)" class="flex flex-row">
       <UFormGroup label="ISBN" required>
-        <UInput variant="outline" placeholder="input ISBN" autocomplete="off" v-model="newIsbn" name="newIsbn"
+        <UInput variant="outline" placeholder="input ISBN" autocomplete="off" v-model="inputISBN" name="newIsbn"
           :ui="{ icon: { trailing: { pointer: '' } } }">
           <template #trailing>
-            <UButton v-show="newIsbn !== undefined" variant="link" icon="i-heroicons-x-mark-20-solid" :padded="false"
-              @click="newIsbn = undefined" />
+            <UButton v-show="inputISBN !== undefined" variant="link" icon="i-heroicons-x-mark-20-solid" :padded="false"
+              @click="inputISBN = undefined" />
           </template>
         </UInput>
       </UFormGroup>

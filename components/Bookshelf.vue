@@ -1,55 +1,18 @@
 <script setup lang="ts">
-const client = useSupabaseClient();
-const user = useSupabaseUser();
+const { user_ISBNs, books, getUser_ISBNsData, getBooksData, startSubscribe } = useBooks()
 
 const isSpine = ref<boolean>(false)
-const user_ISBNs = ref<string[]>([])
-const books = ref<string[]>([])
 
-// subscribeしている情報が変更された時､openDBにfetchしてbooksに追加する
-const handleInserts = async (payload: any) => {
-  user_ISBNs.value.push(payload.new)
-  const { data: openDBData, error: openDBError } = await useFetch("/api/openDB", {
-    method: 'GET',
-    params: {
-      isbn: payload.new.isbn
-    }
-  })
-  if (openDBError.value) throw openDBError.value
-  books.value.push(...openDBData.value)
-}
-// supabaseのusers_isbnテーブルに変更を監視する
-client
-  .channel('users_isbn')
-  .on('postgres_changes', {
-    event: 'INSERT',
-    schema: 'public',
-    table: 'users_isbn',
-  }, handleInserts)
-  .subscribe((status) => {
-    if (status === "SUBSCRIBED") console.log("started subscribe")
-  })
-
-// 初回ロード時にuser.value?.idに一致するデータをsupabaseから取得し､一致するデータをopenDBから取得する
+// 初回ロード時にデータを取得する､その後はsubscribeで更新を受け取る
 onMounted(async () => {
-  const { data: usersIsbnData, error: userIsbnError } = await client
-    .from('users_isbn')
-    .select("*")
-  if (userIsbnError) throw userIsbnError
-  user_ISBNs.value.push(...usersIsbnData)
-
-  // 1000件以上登録されている場合は1000件までに制限する (openDBのAPI制限)
-  if (user_ISBNs.value.length > 1000) user_ISBNs.value = user_ISBNs.value.slice(0, 1000)
-  const { data: openDBData, error: openDBError } = await useFetch("/api/openDB", {
-    method: 'GET',
-    params: {
-      isbn: user_ISBNs.value.map((isbn: any) => isbn.isbn).join(",")
-    }
-  })
-  if (openDBError.value) throw openDBError.value
-  books.value.push(...openDBData.value)
+  const initUser_ISBNs = await getUser_ISBNsData()
+  user_ISBNs.value.push(...initUser_ISBNs)
+  const initData = await getBooksData(user_ISBNs.value.map((data: any) => data.isbn).join(","))
+  books.value.push(...initData)
+  startSubscribe()
 })
 </script>
+
 <template>
   <div class="dark">
     <UToggle color="primary" v-model="isSpine" size="2xl" />
