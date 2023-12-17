@@ -2,24 +2,46 @@
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 
-const books = ref<string[]>([])
-const newIsbn = ref<string>()
+const isSpine = ref<boolean>(false)
 const user_ISBNs = ref<string[]>([])
-const loading = ref<boolean>(false)
+const books = ref<string[]>([])
 
+// subscribeしている情報が変更された時､openDBにfetchしてbooksに追加する
+const handleInserts = async (payload: any) => {
+  user_ISBNs.value.push(payload.new)
+  const { data: openDBData, error: openDBError } = await useFetch("/api/openDB", {
+    method: 'GET',
+    params: {
+      isbn: payload.new.isbn
+    }
+  })
+  if (openDBError.value) throw openDBError.value
+  books.value.push(...openDBData.value)
+}
+// supabaseのusers_isbnテーブルに変更を監視する
+client
+  .channel('users_isbn')
+  .on('postgres_changes', {
+    event: 'INSERT',
+    schema: 'public',
+    table: 'users_isbn',
+  }, handleInserts)
+  .subscribe((status) => {
+    if (status === "SUBSCRIBED") console.log("started subscribe")
+  })
+
+// 初回ロード時にuser.value?.idに一致するデータをsupabaseから取得し､一致するデータをopenDBから取得する
 onMounted(async () => {
-  // user.value?.idに一致するデータをsupabaseから取得する
   const { data: usersIsbnData, error: userIsbnError } = await client
     .from('users_isbn')
     .select("*")
   if (userIsbnError) throw userIsbnError
   user_ISBNs.value.push(...usersIsbnData)
 
-  // users_isbn.valueに一致するデータをopenDBから取得する
-  if (!user_ISBNs.value) return
-  const { data: openDBData, error: openDBError } = await useFetch("v1/get", {
+  // 1000件以上登録されている場合は1000件までに制限する (openDBのAPI制限)
+  if (user_ISBNs.value.length > 1000) user_ISBNs.value = user_ISBNs.value.slice(0, 1000)
+  const { data: openDBData, error: openDBError } = await useFetch("/api/openDB", {
     method: 'GET',
-    baseURL: "https://api.openbd.jp",
     params: {
       isbn: user_ISBNs.value.map((isbn: any) => isbn.isbn).join(",")
     }
@@ -30,7 +52,25 @@ onMounted(async () => {
 </script>
 <template>
   <div class="dark">
-    <div class="flex flex-row flex-wrap items-end">
+    <UToggle color="primary" v-model="isSpine" size="2xl" />
+    <div v-if="isSpine" class="flex flex-row flex-wrap items-end">
+      <div v-for="book in books">
+        <div v-if="book" class="block w-12 h-92">
+          <div class="border-2 bg-primary-200">
+            <div class=" [writing-mode:vertical-rl] text-gray-900 text-2xl flex">
+              <div class="block">
+                <span class="mb-5">{{ book?.summary?.title }}</span>
+              </div>
+              <span class="">{{ book?.summary?.author.split(',', 2)[0] + " " + book?.summary?.author.split(',', 2)[1] ??
+                ""
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="flex flex-row flex-wrap items-end">
       <div v-for="book in books">
         <div class="p-1"></div>
         <div v-if="book" class="p-2 w-40 h-56 border bg-white dark:bg-gray-400 rounded">
@@ -51,7 +91,6 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-
     <div v-for="book in books">
       <p v-if="book">
         {{ book?.onix }}
