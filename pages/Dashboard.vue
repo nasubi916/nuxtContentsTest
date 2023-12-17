@@ -5,9 +5,13 @@ const user = useSupabaseUser()
 </script>
 
 <template>
-  <div>
-    <p class="text-2xl font-bold">本棚</p>
-    <BookAdder />
+  <UCard>
+    <template #header>
+      <BookAdder />
+    </template>
     <Bookshelf />
-  </div>
+    <template #footer>
+      test
+    </template>
+  </UCard>
 </template>
