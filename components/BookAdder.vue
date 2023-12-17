@@ -42,13 +42,22 @@ const addBook = async () => {
 
 </script>
 <template>
-  <div class="dark">
+  <div class="dark flex justify-end">
     <form @submit.prevent="addBook" class="flex flex-row">
-      <input type="text" v-model="newIsbn" class="border rounded p-2" />
-      <button type="submit" class="bg-blue-400 p-2 rounded-lg flex flex-row items-center">
-        <span>本を追加</span>
-      </button>
-      <BarcodeReader />
+      <UFormGroup v-slot="{ error }" label="ISBN" required >
+        <UInput type="text" color="primary" variant="outline" placeholder="input ISBN" autocomplete="off"
+          v-model="newIsbn" :ui="{ icon: { trailing: { pointer: '' } } }">
+          <template #trailing>
+            <UButton v-show="newIsbn !== undefined" color="gray" variant="link"
+              :icon="error ? `i-heroicons-exclamation-triangle-20-solid` : `i-heroicons-x-mark-20-solid`" :padded="false"
+              @click="newIsbn = undefined" />
+          </template>
+        </UInput>
+      </UFormGroup>
+      <UButton  type="submit" class="bg-blue-400 p-2 rounded-lg flex flex-row items-center">
+        <span>本を登録</span>
+      </UButton>
+      <!-- <BarcodeReader /> -->
     </form>
   </div>
 </template>

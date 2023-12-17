@@ -1,7 +1,7 @@
-module.exports = {
-  theme: {},
-  plugins: [],
+import type { Config } from 'tailwindcss'
+
+export default <Partial<Config>> {
   content: [
-  ],
-  darkMode: "class"
+    'docs/content/**/*.md'
+  ]
 }
