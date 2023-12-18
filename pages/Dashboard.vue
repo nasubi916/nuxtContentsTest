@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { BookAdder } from '#build/components';
+import type { BookAdder } from "#build/components";
 
-const user = useSupabaseUser()
+const user = useSupabaseUser();
 </script>
 
 <template>
@@ -10,8 +10,6 @@ const user = useSupabaseUser()
       <BookAdder />
     </template>
     <Bookshelf />
-    <template #footer>
-      test
-    </template>
+    <template #footer> test </template>
   </UCard>
 </template>

@@ -5,7 +5,7 @@
 .nitro
 .cache
 dist
-
+.prettierignore
 # Node dependencies
 node_modules
 

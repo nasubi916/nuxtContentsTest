@@ -5,26 +5,26 @@ const profile = computed(() => user.value?.user_metadata.avatar_url);
 
 const loggedInLinks = [
   {
-    label: 'dashboard',
-    to: '/dashboard',
-    icon: 'i-heroicons-book-open-20-solid',
+    label: "dashboard",
+    to: "/dashboard",
+    icon: "i-heroicons-book-open-20-solid",
   },
   {
-    label: 'setting',
-    to: '/setting',
-    icon: 'i-heroicons-adjustments-vertical-20-solid',
+    label: "setting",
+    to: "/setting",
+    icon: "i-heroicons-adjustments-vertical-20-solid",
   },
   {
-    label: 'logout',
-    to: '/logout',
-  }
-]
+    label: "logout",
+    to: "/logout",
+  },
+];
 const loggedOutLinks = [
   {
-    label: 'login',
-    to: '/login',
-  }
-]
+    label: "login",
+    to: "/login",
+  },
+];
 </script>
 
 <template>
@@ -36,15 +36,19 @@ const loggedOutLinks = [
         <div class="flex justify-center">
           <ColorSelector />
           <div class="items-center text-lg font-bold text-primary text-center">
-            <p v-if="user"> {{ name }}</p>
-            <p v-else> No name</p>
+            <p v-if="user">{{ name }}</p>
+            <p v-else>No name</p>
           </div>
         </div>
         <UDivider />
-        <UVerticalNavigation :links="user ? loggedInLinks : loggedOutLinks" class="w-full" :ui="{
-          label: 'relative text-gray-900 dark:text-white w-32 text-left'
-        }">
-          <template label="Close" #default="{ link }">
+        <UVerticalNavigation
+          :links="user ? loggedInLinks : loggedOutLinks"
+          class="w-full"
+          :ui="{
+            label: 'relative text-gray-900 dark:text-white w-32 text-left',
+          }"
+        >
+          <template #default="{ link }" label="Close">
             <span class="text-primary relative">{{ link.label }}</span>
           </template>
         </UVerticalNavigation>
