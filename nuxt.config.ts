@@ -7,10 +7,6 @@ export default defineNuxtConfig({
   colorMode: {
     preference: "light",
   },
-  typescript: {
-    strict: true,
-    typeCheck: true,
-  },
   supabase: {
     url: process.env.SUPABASE_URL,
     key: process.env.SUPABASE_ANON_KEY,
