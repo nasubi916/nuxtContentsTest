@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { user_ISBNs, books, getUser_ISBNsData, getBooksData, startSubscribe } = useBooks()
 
-const isSpine = ref<boolean>(false)
+const isSpine = ref<boolean>(true)
 
 // 初回ロード時にデータを取得する､その後はsubscribeで更新を受け取る
 onMounted(async () => {
@@ -18,18 +18,7 @@ onMounted(async () => {
     <UToggle color="primary" v-model="isSpine" size="2xl" />
     <div v-if="isSpine" class="flex flex-row flex-wrap items-end">
       <div v-for="book in books">
-        <div v-if="book" class="block w-12 h-92">
-          <div class="border-2 bg-primary-200">
-            <div class=" [writing-mode:vertical-rl] text-gray-900 text-2xl flex">
-              <div class="block">
-                <span class="mb-5">{{ book?.summary?.title }}</span>
-              </div>
-              <span class="">{{ book?.summary?.author.split(',', 2)[0] + " " + book?.summary?.author.split(',', 2)[1] ??
-                ""
-              }}</span>
-            </div>
-          </div>
-        </div>
+        <Book :book="book" v-if="book"/>
       </div>
     </div>
 
@@ -53,12 +42,6 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-    </div>
-    <div v-for="book in books">
-      <p v-if="book">
-        {{ book?.onix }}
-      </p>
-      <p>-----------------------------------------------</p>
     </div>
   </div>
 </template>
