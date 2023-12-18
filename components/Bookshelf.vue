@@ -43,11 +43,5 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <div v-for="book in books">
-      <p v-if="book">
-        {{ book?.onix }}
-      </p>
-      <p>-----------------------------------------------</p>
-    </div>
   </div>
 </template>

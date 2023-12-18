@@ -9,14 +9,16 @@ const addBookWrapper = async (newIsbn: string | undefined) => {
   // ISBNの形式チェック
   if (newIsbn === undefined || newIsbn.length !== 13 || !newIsbn.match(/^[0-9]+$/)) return
   loading.value = true
-  addBook(newIsbn)
-  loading.value = false
+  await addBook(newIsbn)
+  setTimeout(() => {
+    loading.value = false
+  }, 1000);
 }
 </script>
 
 <template>
   <div class="dark flex justify-end">
-    <form @submit.prevent="addBookWrapper(inputISBN)" class="flex flex-row">
+    <form @submit.prevent="addBookWrapper(inputISBN)" :disable="loading" class="flex flex-row">
       <UFormGroup label="ISBN" required>
         <UInput variant="outline" placeholder="input ISBN" autocomplete="off" v-model="inputISBN" name="newIsbn"
           :ui="{ icon: { trailing: { pointer: '' } } }">

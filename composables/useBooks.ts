@@ -27,15 +27,19 @@ export const useBooks = () => {
 
   // subscribeしている情報が変更された時､openDBにfetchしてbooksに追加する
   const handleInserts = async (payload) => {
-    const { data, error } = await useFetch("/api/openDB", {
-      method: 'GET',
-      params: {
-        isbn: payload.new.isbn
-      }
-    })
-    if (error.value) throw error.value
-    user_ISBNs.value.push(payload.new)
-    books.value.push(...data.value)
+    console.log(payload)
+
+    if (payload.new) {
+      const { data, error } = await useFetch("/api/openDB", {
+        method: 'GET',
+        params: {
+          isbn: payload.new.isbn
+        }
+      })
+      if (error.value) throw error.value
+      user_ISBNs.value.push(payload.new)
+      books.value.push(...data.value)
+    }
   }
 
   // supabaseのusers_isbnテーブルの変更をsubscribeする
@@ -43,7 +47,7 @@ export const useBooks = () => {
     client
       .channel('users_isbn')
       .on('postgres_changes', {
-        event: "INSERT,DELETE,UPDATE",
+        event: "*",
         schema: 'public',
         table: 'users_isbn',
       }, handleInserts)
@@ -69,12 +73,24 @@ export const useBooks = () => {
     return data
   }
 
+  //データの削除
+  const deleteBook = async (id: number) => {
+    const { data, error } = await client
+      .from('users_isbn')
+      .delete()
+      .eq('id', id)
+    if (error) throw error
+    return data
+  }
+
   return {
     user_ISBNs,
     books,
     getUser_ISBNsData,
     getBooksData,
     startSubscribe,
-    addBook
+    addBook,
+    deleteBook
+
   }
 }
