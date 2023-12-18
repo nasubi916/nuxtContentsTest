@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const isbn = ref<string>();
-const decodedText = ref("");
 </script>
 
 <template>
