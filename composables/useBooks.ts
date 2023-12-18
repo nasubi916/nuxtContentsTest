@@ -43,7 +43,7 @@ export const useBooks = () => {
     client
       .channel('users_isbn')
       .on('postgres_changes', {
-        event: 'INSERT',
+        event: "INSERT,DELETE,UPDATE",
         schema: 'public',
         table: 'users_isbn',
       }, handleInserts)

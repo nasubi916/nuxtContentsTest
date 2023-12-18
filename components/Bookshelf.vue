@@ -18,18 +18,7 @@ onMounted(async () => {
     <UToggle color="primary" v-model="isSpine" size="2xl" />
     <div v-if="isSpine" class="flex flex-row flex-wrap items-end">
       <div v-for="book in books">
-        <div v-if="book" class="block w-12 h-92">
-          <div class="border-2 bg-primary-200">
-            <div class=" [writing-mode:vertical-rl] text-gray-900 text-2xl flex">
-              <div class="block">
-                <span class="mb-5">{{ book?.summary?.title }}</span>
-              </div>
-              <span class="">{{ book?.summary?.author.split(',', 2)[0] + " " + book?.summary?.author.split(',', 2)[1] ??
-                ""
-              }}</span>
-            </div>
-          </div>
-        </div>
+        <Book :book="book" v-if="book"/>
       </div>
     </div>
 
