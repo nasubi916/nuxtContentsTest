@@ -1,8 +1,5 @@
 <script setup lang="ts">
 const supabase = useSupabaseClient();
-const user = useSupabaseUser();
-const name = computed(() => user.value?.user_metadata.full_name);
-const profile = computed(() => user.value?.user_metadata.avatar_url);
 const loading = ref(false);
 const logout = async () => {
   try {

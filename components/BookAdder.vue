@@ -3,7 +3,6 @@ const { addBook } = useBooks();
 const inputISBN = ref<string>();
 const loading = ref<boolean>(false);
 
-//! 連続登録やめろ
 // user.value?.idをキーにしてデータを登録する
 const addBookWrapper = async (newIsbn: string | undefined) => {
   // ISBNの形式チェック

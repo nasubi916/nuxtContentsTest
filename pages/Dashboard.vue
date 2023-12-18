@@ -1,15 +1,15 @@
-<script setup lang="ts">
-import type { BookAdder } from "#build/components";
-
-const user = useSupabaseUser();
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <UCard>
     <template #header>
-      <BookAdder />
+      <p class="text-2xl text-cool">Dashboard</p>
+      <div class="flex justify-between">
+        <BookSearcher />
+        <BookAdder />
+      </div>
     </template>
-    <Bookshelf />
+    <BookShelf />
     <template #footer> test </template>
   </UCard>
 </template>

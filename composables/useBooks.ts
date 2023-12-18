@@ -1,13 +1,13 @@
 export const useBooks = () => {
   const client = useSupabaseClient();
   const user = useSupabaseUser();
-  const user_ISBNs = ref<Users_isbn[]>([]);
+  const userISBNs = ref<UsersISBN[]>([]);
   const books = ref<BookResponse[]>([]);
 
-  const getUser_ISBNsData = async (): Promise<Users_isbn[]> => {
+  const getUserISBNsData = async (): Promise<UsersISBN[]> => {
     const { data, error } = await client.from("users_isbn").select("*");
     if (error) throw error;
-    return data as Users_isbn[];
+    return data as UsersISBN[];
   };
 
   const getBooksData = async (ISBNs: string): Promise<BookResponse[]> => {
@@ -26,10 +26,9 @@ export const useBooks = () => {
   };
 
   // subscribeしている情報が変更された時､openDBにfetchしてbooksに追加する
-  const handleInserts = async (payload: PayloadUsers_isbn): Promise<void> => {
-    console.log(payload);
+  const handleInserts = async (payload: Payload): Promise<void> => {
     if (payload.eventType === "DELETE") {
-      user_ISBNs.value = user_ISBNs.value.filter((book) => {
+      userISBNs.value = userISBNs.value.filter((book) => {
         return book.id !== payload.old.id;
       });
       return;
@@ -43,7 +42,7 @@ export const useBooks = () => {
       });
       if (error.value) throw error.value;
       if (data.value === null) throw new Error("No data");
-      user_ISBNs.value.push(payload.new);
+      userISBNs.value.push(payload.new);
       books.value.push(...data.value);
     }
   };
@@ -71,7 +70,7 @@ export const useBooks = () => {
     // 既に登録済みの場合は登録しない //!機能してない
     if (
       !newIsbn ||
-      user_ISBNs.value
+      userISBNs.value
         .map((book) => {
           return book.isbn;
         })
@@ -97,9 +96,9 @@ export const useBooks = () => {
   };
 
   return {
-    user_ISBNs,
+    userISBNs,
     books,
-    getUser_ISBNsData,
+    getUserISBNsData,
     getBooksData,
     startSubscribe,
     addBook,

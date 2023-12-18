@@ -45,11 +45,13 @@ const loggedOutLinks = [
           :links="user ? loggedInLinks : loggedOutLinks"
           class="w-full"
           :ui="{
-            label: 'relative text-gray-900 dark:text-white w-32 text-left',
+            label: 'relative text-cool-900 dark:text-white w-32 text-left',
           }"
         >
-          <template #default="{ link }" label="Close">
-            <span class="text-primary relative">{{ link.label }}</span>
+          <template #default="{ link }">
+            <div label="Close">
+              <span class="text-primary relative">{{ link.label }}</span>
+            </div>
           </template>
         </UVerticalNavigation>
       </div>
