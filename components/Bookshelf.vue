@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { user_ISBNs, books, getUser_ISBNsData, getBooksData, startSubscribe } = useBooks()
 
-const isSpine = ref<boolean>(false)
+const isSpine = ref<boolean>(true)
 
 // 初回ロード時にデータを取得する､その後はsubscribeで更新を受け取る
 onMounted(async () => {
