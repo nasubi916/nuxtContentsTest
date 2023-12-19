@@ -1,13 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const isModalOpen = ref<boolean>(false);
+</script>
 
 <template>
   <div>
-    <nav class="justify-start bg-primary-400 p-2 flex items-center">
+    <nav class="bg-primary-400 p-2 flex items-center">
       <ULink to="/" class="mr-2 flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="5em"
-          height="5em"
+          width="3em"
+          height="3em"
           viewBox="0 0 24 24"
         >
           <path
@@ -17,9 +19,24 @@
         </svg>
         <p class="font-extrabold text-3xl text-white">Virtual BookShelf</p>
       </ULink>
-      <UIcon name="i-heroicons-book-open" class="w-full h-full" />
+      <UButton
+        icon="i-heroicons-list-bullet-20-solid"
+        variant="outline"
+        color="white"
+        class="ml-auto mr-2"
+        @click="isModalOpen = true"
+      />
       <AccountMenu class="mr-2" />
     </nav>
+    <USlideover v-model="isModalOpen">
+      <div class="p-4 flex-1">
+        色々いじれるゾーン
+        <BookSearcher />
+        <BookAdder />
+        setting...
+        <Placeholder class="h-full" />
+      </div>
+    </USlideover>
     <slot />
   </div>
 </template>

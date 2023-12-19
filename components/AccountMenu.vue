@@ -10,11 +10,6 @@ const loggedInLinks = [
     icon: "i-heroicons-book-open-20-solid",
   },
   {
-    label: "setting",
-    to: "/setting",
-    icon: "i-heroicons-adjustments-vertical-20-solid",
-  },
-  {
     label: "logout",
     to: "/logout",
   },

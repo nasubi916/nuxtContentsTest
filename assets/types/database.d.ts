@@ -1,4 +1,4 @@
-type UsersISBN = {
+type UserISBN = {
   id: number;
   user_id: string;
   isbn: string;
@@ -6,11 +6,11 @@ type UsersISBN = {
 };
 
 type Payload = {
-  new: UsersISBN;
-  old: UsersISBN;
+  new: UserISBN;
+  old: UserISBN;
   eventType: "INSERT" | "UPDATE" | "DELETE";
   schema: "public";
-  table: "users_isbn";
+  table: "user_isbn";
   commit_timestamp: string;
   data: {
     id: number;

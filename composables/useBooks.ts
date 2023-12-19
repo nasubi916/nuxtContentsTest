@@ -1,13 +1,13 @@
 export const useBooks = () => {
   const client = useSupabaseClient();
   const user = useSupabaseUser();
-  const userISBNs = ref<UsersISBN[]>([]);
+  const userISBNs = ref<UserISBN[]>([]);
   const books = ref<BookResponse[]>([]);
 
-  const getUserISBNsData = async (): Promise<UsersISBN[]> => {
-    const { data, error } = await client.from("users_isbn").select("*");
+  const getUserISBNsData = async (): Promise<UserISBN[]> => {
+    const { data, error } = await client.from("user_isbn").select("*");
     if (error) throw error;
-    return data as UsersISBN[];
+    return data as UserISBN[];
   };
 
   const getBooksData = async (ISBNs: string): Promise<BookResponse[]> => {
@@ -50,13 +50,13 @@ export const useBooks = () => {
   // supabaseのusers_isbnテーブルの変更をsubscribeする
   const startSubscribe = (): void => {
     client
-      .channel("users_isbn")
+      .channel("user_isbn")
       .on(
         "postgres_changes",
         {
           event: "*",
           schema: "public",
-          table: "users_isbn",
+          table: "user_isbn",
         },
         handleInserts,
       )
@@ -79,7 +79,7 @@ export const useBooks = () => {
       return;
 
     const { error } = await client
-      .from("users_isbn")
+      .from("user_isbn")
       .insert({
         user_id: user.value?.id,
         isbn: newIsbn,
@@ -91,7 +91,7 @@ export const useBooks = () => {
 
   // データの削除
   const deleteBook = async (id: string) => {
-    const { error } = await client.from("users_isbn").delete().eq("id", id);
+    const { error } = await client.from("user_isbn").delete().eq("id", id);
     if (error) throw error;
   };
 
