@@ -17,11 +17,11 @@ const deleteBookWrapper = async (id: string) => {
 </script>
 
 <template>
-  <div>
+  <div class="max-h-fit">
     <UButton
       label="Open"
-      variant="outline"
-      class="block w-24 h-92 text-center"
+      variant="solid"
+      class="w-12 text-center"
       @click="isOpen = true"
     >
       <div

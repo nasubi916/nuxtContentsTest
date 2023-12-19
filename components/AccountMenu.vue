@@ -24,7 +24,7 @@ const loggedOutLinks = [
 
 <template>
   <UPopover :popper="{ placement: 'bottom-end' }">
-    <UAvatar :src="profile" label="Open" size="lg" />
+    <UAvatar :src="profile" label="Open" size="md" />
 
     <template #panel>
       <div class="p-2">

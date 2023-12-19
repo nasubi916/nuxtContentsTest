@@ -1,8 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <UCard class="bg-cool-300 dark:bg-cool-800">
+  <div>
     <BookShelf />
-    <template #footer> test </template>
-  </UCard>
+  </div>
 </template>
