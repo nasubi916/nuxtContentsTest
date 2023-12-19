@@ -19,13 +19,9 @@ const isModalOpen = ref<boolean>(false);
         </svg>
         <p class="font-extrabold text-3xl text-white">Virtual BookShelf</p>
       </ULink>
-      <UButton
-        icon="i-heroicons-list-bullet-20-solid"
-        variant="outline"
-        color="white"
-        class="ml-auto mr-2"
-        @click="isModalOpen = true"
-      />
+      <UButton variant="link" class="ml-auto mr-2" @click="isModalOpen = true">
+        <SVGhamburger />
+      </UButton>
       <AccountMenu class="mr-2" />
     </nav>
     <USlideover v-model="isModalOpen">
