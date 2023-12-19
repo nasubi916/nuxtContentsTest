@@ -16,7 +16,7 @@ onMounted(async () => {
 
 <template>
   <div class="dark">
-    <div class="flex flex-row flex-wrap items-end">
+    <div class="absolute bottom-0 flex flex-row items-end h-5/6">
       <div v-for="book in books" :key="book.summary.ISBN">
         <BookSpine v-if="book" :book="book" />
       </div>
