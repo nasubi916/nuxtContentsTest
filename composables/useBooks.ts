@@ -22,7 +22,6 @@ export const useBooks = () => {
     if (error.value) throw new Error(error.value.message);
     if (data.value === null) throw new Error("No data");
     // 本のデータをBookData型に変換する
-    console.log(data.value);
     const booksData = data.value.map((book: BookResponse): BookData => {
       // 著者名の整形
       let author: string =
@@ -49,7 +48,6 @@ export const useBooks = () => {
         page: book.onix.DescriptiveDetail?.extent?.[0]?.extentValue ?? 0,
       };
     });
-    console.log(booksData);
     return booksData;
   };
 
