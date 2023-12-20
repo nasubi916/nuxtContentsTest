@@ -23,17 +23,21 @@ export const useBooks = () => {
     if (data.value === null) throw new Error("No data");
     // 本のデータをBookData型に変換する
     const booksData = data.value.map((book: BookResponse) => {
+      let author: string =
+        book.onix.DescriptiveDetail.Contributor[0].PersonName.content;
+      const authorArray = author.split(",");
+      if (authorArray.length > 1)
+        author = authorArray[0] + " " + authorArray[1];
       return {
-        isbn: book.onix.recordReference ?? "",
+        isbn: book.onix.RecordReference,
         title:
-          book.onix.descriptiveDetail.collection.titleDetail.titleElement[0]
-            .titleText.content ?? "",
-        author:
-          book.onix.descriptiveDetail.contributor[0].personName.content ?? "",
-        publisher: book.onix.publishingDetail.publisher.publisherName ?? "",
-        label: book.onix.publishingDetail.imprint.imprintName ?? "",
-        date: book.onix.publishingDetail.publishingDate[0].date ?? "",
-        price: book.onix.productSupply.supplyDetail.price[0].priceAmount ?? 0,
+          book.onix.DescriptiveDetail.TitleDetail.TitleElement.TitleText
+            .content,
+        author,
+        publisher: book.onix.PublishingDetail.publisher?.publisherName ?? "",
+        label: book.onix.PublishingDetail.Imprint.ImprintName,
+        date: book.onix.PublishingDetail.PublishingDate[0].Date,
+        price: book.onix.ProductSupply.SupplyDetail.Price[0].PriceAmount,
       };
     });
     return booksData;

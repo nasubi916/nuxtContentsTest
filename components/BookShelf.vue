@@ -9,11 +9,12 @@ onMounted(async () => {
     initUserISBNs.map((data: any) => data.isbn).join(","),
   );
   // userISBNs配列に対応する本のデータをbooks配列に格納する
-  userISBNs.value.forEach((userISBN: UserISBN) => {
-    const book = initData.find((book: BookData) => book.isbn === userISBN.isbn);
-    if (book) {
-      userISBN.book_data = book;
-    }
+  userISBNs.value = initUserISBNs.map((userISBN: any) => {
+    const book = initData.find((book: any) => book.isbn === userISBN.isbn);
+    return {
+      ...userISBN,
+      book_data: book,
+    };
   });
   startSubscribe();
 });

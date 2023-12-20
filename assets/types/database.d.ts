@@ -3,7 +3,7 @@ type UserISBN = {
   user_id: string;
   isbn: string;
   created_at: string;
-  book_data?: BookData;
+  book_data: BookData;
 };
 
 type BookData = {

@@ -17,7 +17,7 @@ const deleteBookWrapper = async (id: string) => {
 </script>
 
 <template>
-  <div class="max-h-fit">
+  <div v-if="p.book" class="max-h-fit">
     <UButton
       label="Open"
       variant="solid"
@@ -28,9 +28,9 @@ const deleteBookWrapper = async (id: string) => {
         class="[writing-mode:vertical-rl] text-cool-900 text-2xl flex justify-center"
       >
         <span class="mb-5 whitespace-nowrap truncate">{{
-          p.book?.book_data?.title
+          p.book.book_data?.title
         }}</span>
-        <span class="whitespace-nowrap">{{ p.book?.book_data?.author }}</span>
+        <span class="whitespace-nowrap">{{ p.book.book_data?.author }}</span>
       </div>
     </UButton>
     <UModal v-model="isOpen">
@@ -40,7 +40,7 @@ const deleteBookWrapper = async (id: string) => {
           icon="i-heroicons-trash"
           variant="outline"
           class="left-0 top-0"
-          @click="deleteBookWrapper(p.book?.id)"
+          @click="deleteBookWrapper(p.book.id)"
         />
         <p>
           {{ book.book_data }}

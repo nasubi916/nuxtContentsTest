@@ -34,7 +34,6 @@ const isSidebarOpen = ref<boolean>(false);
         <BookSearcher />
         <BookAdder />
         setting...
-        <Placeholder class="h-full" />
       </div>
     </USlideover>
     <slot />
