@@ -77,27 +77,13 @@ export const useBooks = () => {
   };
 
   // user.value?.idをキーにしてデータを登録する
-  const addBook = async (newIsbn: string | undefined): Promise<void> => {
-    // 既に登録済みの場合は登録しない //!機能してない
-    if (
-      !newIsbn ||
-      userISBNs.value
-        .map((book) => {
-          return book.isbn;
-        })
-        .includes(newIsbn)
-    )
-      return;
-
-    // openDBから本のデータを取得
-    const booksData = await getBooksData(newIsbn);
-
+  const addBook = async (bookData: BookData): Promise<void> => {
     const { error } = await client
       .from("user_isbn")
       .insert({
         user_id: user.value?.id,
-        isbn: newIsbn,
-        book_data: booksData[0],
+        isbn: bookData.isbn,
+        book_data: bookData,
       })
       .select("id,user_id,isbn,created_at")
       .single();

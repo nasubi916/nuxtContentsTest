@@ -1,8 +1,10 @@
 <script setup lang="ts">
 const push = usePush();
-const { addBook, getUserISBNsData } = useBooks();
+const { getBooksData, addBook, getUserISBNsData } = useBooks();
 const inputISBN = ref<string>();
+const newUserISBN = ref<UserISBN>();
 const loading = ref<boolean>(false);
+const isModal = ref<boolean>(false);
 
 // user.value?.idをキーにしてデータを登録する
 const addBookWrapper = async (newISBN: string | undefined) => {
@@ -18,12 +20,25 @@ const addBookWrapper = async (newISBN: string | undefined) => {
   if (userISBNs.find((userISBN: any) => userISBN.isbn === newISBN))
     return push.error({ message: "ISBNは既に登録されています" });
 
-  // 本のデータを登録する
+  // 本のデータを取得する
   loading.value = true;
-  await addBook(newISBN);
-  setTimeout(() => {
-    loading.value = false;
-  }, 1000);
+  newUserISBN.value = {
+    id: "",
+    isbn: newISBN,
+    user_id: "",
+    book_data: (await getBooksData(newISBN))[0],
+    created_at: "",
+  };
+  loading.value = false;
+  isModal.value = true;
+};
+
+const confirm = async (bookData: BookData) => {
+  await addBook(bookData);
+  push.success({ message: "本を登録しました" });
+  isModal.value = false;
+  inputISBN.value = undefined;
+  newUserISBN.value = undefined;
 };
 </script>
 
@@ -63,5 +78,16 @@ const addBookWrapper = async (newISBN: string | undefined) => {
       </UButton>
       <!-- <BarcodeReader /> -->
     </form>
+    <UModal v-model="isModal">
+      <BookModal v-if="newUserISBN" :book="newUserISBN">
+        <UButton
+          :loading="loading"
+          icon="i-heroicons-check-20-solid"
+          variant="outline"
+          class="right-0 bottom-0"
+          @click="confirm(newUserISBN.book_data)"
+        />
+      </BookModal>
+    </UModal>
   </div>
 </template>

@@ -39,7 +39,6 @@ const deleteBookWrapper = async (id: string) => {
           :loading="loading"
           icon="i-heroicons-trash"
           variant="outline"
-          class="left-0 top-0"
           @click="deleteBookWrapper(p.book.id)"
         />
       </BookModal>
