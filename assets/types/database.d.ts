@@ -1,8 +1,19 @@
 type UserISBN = {
-  id: number;
+  id: string;
   user_id: string;
   isbn: string;
   created_at: string;
+  book_data: BookData;
+};
+
+type BookData = {
+  isbn: string;
+  title: string;
+  author: string;
+  publisher: string;
+  label: string;
+  date: string;
+  price: number;
 };
 
 type Payload = {
@@ -17,6 +28,7 @@ type Payload = {
     user_id: string;
     isbn: string;
     created_at: string;
+    book_data?: BookData;
   };
   error: null | any;
 };

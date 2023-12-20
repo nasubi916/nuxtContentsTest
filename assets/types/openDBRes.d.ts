@@ -5,12 +5,12 @@ type BookResponse = {
 };
 
 type Onix = {
-  recordReference: string; // ISBN code
-  productIdentifier: {
+  RecordReference: string; // ISBN code
+  productIdentifier?: {
     idValue: string; // ISBN code
     productIDType: string; // ISBN code
   };
-  descriptiveDetail: {
+  DescriptiveDetail: {
     productComposition: string; // Set product sales availability
     productFormDetail: string; // Format
     measure: {
@@ -23,37 +23,37 @@ type Onix = {
       productForm: string;
       productFormDescription: string;
     }[];
-    collection: {
-      titleDetail: {
+    Collection: {
+      TitleDetail: {
         titleType: string;
-        titleElement: {
-          titleElementLevel: string;
-          titleText: {
+        TitleElement: {
+          TitleElementLevel: string;
+          TitleText: {
             content: string;
             collationKey: string;
           };
         }[];
       };
-      collectionType: string;
+      CollectionType: string;
     };
-    titleDetail: {
-      titleType: string;
-      titleElement: {
-        titleElementLevel: string;
-        titleText: {
+    TitleDetail: {
+      TitleType: string;
+      TitleElement: {
+        TitleElementLevel: string;
+        TitleText: {
           content: string;
           collationkey: string;
         };
       };
     };
-    contributor: {
-      contributorRole: string[];
-      personName: {
+    Contributor: {
+      ContributorRole: string[];
+      PersonName: {
         content: string; // Name
         collationkey: string; // Collation key
       };
       biographicalNote: string; // Author biography
-      sequenceNumber: number;
+      SequenceNumber: number;
     }[];
     language: {
       languageCode: string;
@@ -76,12 +76,12 @@ type Onix = {
       audienceCodeValue: string;
     }[];
   };
-  measure: {
+  measure?: {
     measureType: string;
     measureUnitCode: string;
     measurement: string;
   }[];
-  collateralDetail: {
+  CollateralDetail?: {
     textContent: {
       text: string;
       textType: string;
@@ -101,15 +101,15 @@ type Onix = {
       }[];
     }[];
   };
-  publishingDetail: {
-    imprint: {
-      imprintName: string;
-      imprintIdentifier: {
+  PublishingDetail: {
+    Imprint: {
+      ImprintName: string;
+      imprintIdentifier?: {
         idValue: string;
         imprintIDType: string;
       }[];
     };
-    publisher: {
+    publisher?: {
       publisherIdentifier: {
         publisherIDType: string;
         idValue: string;
@@ -117,23 +117,23 @@ type Onix = {
       publisherName: string;
       publishingRole: string;
     };
-    publishingDate: {
-      date: string;
-      publishingDateRole: string;
+    PublishingDate: {
+      Date: string;
+      PublishingDateRole: string;
     }[];
   };
-  notificationType: string;
-  productSupply: {
-    supplyDetail: {
-      returnsConditions: {
+  notificationType?: string;
+  ProductSupply: {
+    SupplyDetail: {
+      returnsConditions?: {
         returnsCode: string;
         returnsCodeType: string;
       };
-      productAvailability: string;
-      price: {
-        priceAmount: number;
-        currencyCode: string;
-        priceType: string;
+      ProductAvailability: string;
+      Price: {
+        PriceAmount: number;
+        CurrencyCode: string;
+        PriceType: string;
       }[];
     };
   };
@@ -149,11 +149,11 @@ type Hanmoto = {
   reviews: {
     han: string; // Edition
     appearance: string; // Publication date
-    postUser: string; // Contributor
-    kubunID: number; // Source category ID
+    post_user: string; // Contributor
+    kubun_id: number; // Source category ID
     source: string; // Source
     choyukan: string; // Morning / evening edition
-    sourceID: number; // Source ID
+    source_id: number; // Source ID
     reviewer: string; // Reviewer
     link: string; // Link
   }[];
@@ -167,7 +167,7 @@ type Hanmoto = {
 
 type Summary = {
   publisher: string;
-  ISBN: string;
+  isbn: string;
   pubdate: string;
   title: string;
   series: string;
