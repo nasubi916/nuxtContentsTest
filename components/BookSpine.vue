@@ -27,21 +27,23 @@ const deleteBookWrapper = async (id: string) => {
 </script>
 
 <template>
-  <div v-if="p.book" class="w-12 max-h-[300px] min-h-[300px] text-center">
+  <div v-if="p.book">
     <UButton
       label="Open"
       variant="solid"
-      class="w-12 h-92 text-center"
+      class="w-12 text-center"
       @click="isOpen = true"
     >
-      <div class="[writing-mode:vertical-rl] flex flex-row w-full h-full">
+      <div
+        class="[writing-mode:vertical-rl] flex flex-row max-h-[450px] min-h-[300px]"
+      >
         <span
           class="mt-3 mb-5 truncate font-bold text-2xl max-w-fit max-h-fit"
           >{{ p.book.book_data?.title }}</span
         ><span class="text-xl m-auto mb-3 whitespace-nowrap">
           {{ p.book.book_data?.author }}</span
         >
-        <span class="text-xs items-center mb-3 whitespace-nowrap">
+        <span class="text-xs items-center whitespace-nowrap">
           {{ p.book.book_data?.label }}
         </span>
       </div>
