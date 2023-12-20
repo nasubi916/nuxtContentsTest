@@ -24,11 +24,17 @@ export const useBooks = () => {
     // 本のデータをBookData型に変換する
     console.log(data.value);
     const booksData = data.value.map((book: BookResponse): BookData => {
+      // 著者名の整形
       let author: string =
         book.onix.DescriptiveDetail.Contributor[0].PersonName.content;
       const authorArray = author.split(",");
       if (authorArray.length > 1)
         author = authorArray[0] + " " + authorArray[1];
+      // 日付の整形
+      let date: string =
+        book.onix?.PublishingDetail?.PublishingDate[0]?.Date ?? "";
+      date = date.slice(0, 4) + "/" + date.slice(4, 6) + "/" + date.slice(6, 8);
+      if (date === "//") date = "不明";
       return {
         isbn: book.onix.RecordReference,
         title:
@@ -37,8 +43,9 @@ export const useBooks = () => {
         author,
         publisher: book.onix.PublishingDetail.Imprint.ImprintName,
         label: book.summary.series ?? "",
-        date: book.onix.PublishingDetail.PublishingDate[0].Date,
-        price: book.onix.ProductSupply.SupplyDetail.Price[0].PriceAmount,
+        date,
+        price:
+          book.onix?.ProductSupply?.SupplyDetail?.Price[0]?.PriceAmount ?? 0,
         page: book.onix.DescriptiveDetail?.extent?.[0]?.extentValue ?? 0,
       };
     });
