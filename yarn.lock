@@ -5621,6 +5621,11 @@ normalize-range@^0.1.2:
   resolved "https://registry.yarnpkg.com/normalize-range/-/normalize-range-0.1.2.tgz#2d10c06bdfd312ea9777695a4d28439456b75942"
   integrity sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==
 
+notivue@^1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/notivue/-/notivue-1.4.5.tgz#c56535e27ad7dde4147c733a7f4f2f5810c2f5f2"
+  integrity sha512-REw58I8oHlYTx8j+IJueiPJkBS/FxEMj3Etg2avIN77PhNyYZ5j4V6g82TbyB+jH9R67/3gitM770CUEuNrarQ==
+
 npm-bundled@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/npm-bundled/-/npm-bundled-3.0.0.tgz#7e8e2f8bb26b794265028491be60321a25a39db7"

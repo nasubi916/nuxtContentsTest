@@ -1,19 +1,26 @@
 <script setup lang="ts">
-const { addBook } = useBooks();
+const push = usePush();
+const { addBook, getUserISBNsData } = useBooks();
 const inputISBN = ref<string>();
 const loading = ref<boolean>(false);
 
 // user.value?.idをキーにしてデータを登録する
-const addBookWrapper = async (newIsbn: string | undefined) => {
+const addBookWrapper = async (newISBN: string | undefined) => {
   // ISBNの形式チェック
-  if (
-    newIsbn === undefined ||
-    newIsbn.length !== 13 ||
-    !newIsbn.match(/^[0-9]+$/)
-  )
-    return;
+  if (newISBN === undefined)
+    return push.error({ message: "ISBNが入力されていません" });
+  if (!newISBN.match(/^[0-9-]+$/))
+    return push.error({ message: "ISBNは数値とハイフンのみです" });
+  if (newISBN.length !== 10 && newISBN.length !== 13)
+    return push.error({ message: "ISBNは10桁か13桁です" });
+  // 既に登録されているかどうかのチェック
+  const userISBNs = await getUserISBNsData();
+  if (userISBNs.find((userISBN: any) => userISBN.isbn === newISBN))
+    return push.error({ message: "ISBNは既に登録されています" });
+
+  // 本のデータを登録する
   loading.value = true;
-  await addBook(newIsbn);
+  await addBook(newISBN);
   setTimeout(() => {
     loading.value = false;
   }, 1000);

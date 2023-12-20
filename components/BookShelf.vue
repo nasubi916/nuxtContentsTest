@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { userISBNs, getUserISBNsData, getBooksData, startSubscribe } = useBooks();
+const { userISBNs, getUserISBNsData, getBooksData, startSubscribe } =
+  useBooks();
 
 // 初回ロード時にデータを取得する､その後はsubscribeで更新を受け取る
 onMounted(async () => {
