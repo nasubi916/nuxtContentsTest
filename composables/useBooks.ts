@@ -111,6 +111,14 @@ export const useBooks = () => {
       .eq("id", userBooks.id);
     if (error) throw error;
   };
+  // データの更新
+  const updateBook = async (userBooks: UserBooks) => {
+    const { error } = await client
+      .from("user_isbn")
+      .update({ book_data: userBooks.book_data })
+      .eq("id", userBooks.id);
+    if (error) throw error;
+  };
 
   return {
     userISBNs,
@@ -120,5 +128,6 @@ export const useBooks = () => {
     addBook,
     deleteBook,
     reloadBook,
+    updateBook,
   };
 };
