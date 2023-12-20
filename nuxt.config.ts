@@ -1,6 +1,16 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ["@nuxt/ui", "@nuxtjs/supabase"],
+  modules: ["@nuxt/ui", "@nuxtjs/supabase", "notivue/nuxt"],
+  css: ["notivue/notifications.css", "notivue/animations.css"],
+  notivue: {
+    position: "bottom-right",
+    limit: 3,
+    notifications: {
+      global: {
+        duration: 2000,
+      },
+    },
+  },
   ui: {
     global: true,
   },

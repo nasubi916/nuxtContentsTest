@@ -22,22 +22,30 @@ export const useBooks = () => {
     if (error.value) throw new Error(error.value.message);
     if (data.value === null) throw new Error("No data");
     // 本のデータをBookData型に変換する
-    const booksData = data.value.map((book: BookResponse) => {
+    const booksData = data.value.map((book: BookResponse): BookData => {
+      // 著者名の整形
       let author: string =
         book.onix.DescriptiveDetail.Contributor[0].PersonName.content;
       const authorArray = author.split(",");
       if (authorArray.length > 1)
         author = authorArray[0] + " " + authorArray[1];
+      // 日付の整形
+      let date: string =
+        book.onix?.PublishingDetail?.PublishingDate[0]?.Date ?? "";
+      date = date.slice(0, 4) + "/" + date.slice(4, 6) + "/" + date.slice(6, 8);
+      if (date === "//") date = "不明";
       return {
         isbn: book.onix.RecordReference,
         title:
           book.onix.DescriptiveDetail.TitleDetail.TitleElement.TitleText
             .content,
         author,
-        publisher: book.onix.PublishingDetail.publisher?.publisherName ?? "",
-        label: book.onix.PublishingDetail.Imprint.ImprintName,
-        date: book.onix.PublishingDetail.PublishingDate[0].Date,
-        price: book.onix.ProductSupply.SupplyDetail.Price[0].PriceAmount,
+        publisher: book.onix.PublishingDetail.Imprint.ImprintName,
+        label: book.summary.series ?? "",
+        date,
+        price:
+          book.onix?.ProductSupply?.SupplyDetail?.Price[0]?.PriceAmount ?? 0,
+        page: book.onix.DescriptiveDetail?.extent?.[0]?.extentValue ?? 0,
       };
     });
     return booksData;
@@ -74,27 +82,13 @@ export const useBooks = () => {
   };
 
   // user.value?.idをキーにしてデータを登録する
-  const addBook = async (newIsbn: string | undefined): Promise<void> => {
-    // 既に登録済みの場合は登録しない //!機能してない
-    if (
-      !newIsbn ||
-      userISBNs.value
-        .map((book) => {
-          return book.isbn;
-        })
-        .includes(newIsbn)
-    )
-      return;
-
-    // openDBから本のデータを取得
-    const booksData = await getBooksData(newIsbn);
-
+  const addBook = async (bookData: BookData): Promise<void> => {
     const { error } = await client
       .from("user_isbn")
       .insert({
         user_id: user.value?.id,
-        isbn: newIsbn,
-        book_data: booksData[0],
+        isbn: bookData.isbn,
+        book_data: bookData,
       })
       .select("id,user_id,isbn,created_at")
       .single();

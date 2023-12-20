@@ -34,18 +34,14 @@ const deleteBookWrapper = async (id: string) => {
       </div>
     </UButton>
     <UModal v-model="isOpen">
-      <div class="p-4">
+      <BookModal :book="p.book">
         <UButton
           :loading="loading"
           icon="i-heroicons-trash"
           variant="outline"
-          class="left-0 top-0"
           @click="deleteBookWrapper(p.book.id)"
         />
-        <p>
-          {{ book.book_data }}
-        </p>
-      </div>
+      </BookModal>
     </UModal>
   </div>
 </template>
