@@ -30,8 +30,9 @@ const signInWithOAuth = async (useProvider: Provider) => {
         <div class="flex flex-col justify-center">
           <p class="text-2xl font-bold">仮想本棚</p>
           <p class="text-xl font-bold">ログイン</p>
-          <div class="flex flex-row justify-center">
-            <button
+          <div class="flex md:flex-row flex-col items-center justify-center">
+            <UButton
+              :loading="loading"
               class="bg-blue-400 p-2 rounded-lg flex flex-row items-center"
               @click="signInWithOAuth('github')"
             >
@@ -40,10 +41,10 @@ const signInWithOAuth = async (useProvider: Provider) => {
                 alt="github"
                 class="w-12 h-12 rounded-full"
               />
-              <span v-if="loading">Loading ...</span>
-              <span v-else>Sign in with GitHub</span>
-            </button>
-            <button
+              <span>Sign in with GitHub</span>
+            </UButton>
+            <UButton
+              :loading="loading"
               class="bg-red-400 p-2 rounded-lg flex flex-row items-center"
               @click="signInWithOAuth('google')"
             >
@@ -52,9 +53,8 @@ const signInWithOAuth = async (useProvider: Provider) => {
                 alt="google"
                 class="w-12 h-12 rounded-full"
               />
-              <span v-if="loading">Loading ...</span>
-              <span v-else>Sign in with Google</span>
-            </button>
+              <span>Sign in with Google</span>
+            </UButton>
           </div>
         </div>
       </UCard>
