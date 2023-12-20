@@ -2,7 +2,7 @@
 const push = usePush();
 const { getBooksData, addBook, getUserISBNsData } = useBooks();
 const inputISBN = ref<string>();
-const newUserISBN = ref<UserISBN>();
+const newUserISBN = ref<UserBooks>();
 const loading = ref<boolean>(false);
 const isModal = ref<boolean>(false);
 

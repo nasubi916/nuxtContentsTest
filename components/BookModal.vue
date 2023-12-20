@@ -1,8 +1,22 @@
 <script lang="ts" setup>
+const { reloadBook } = useBooks();
 const p = defineProps<{
-  book: UserISBN;
+  book: UserBooks;
 }>();
+
+const isOpen = ref<boolean>(false);
+const loading = ref<boolean>(false);
+
+const reloadBookDataWrapper = async (userBooks: UserBooks) => {
+  loading.value = true;
+  await reloadBook(userBooks);
+  setTimeout(() => {
+    isOpen.value = false;
+    loading.value = false;
+  }, 1000);
+};
 </script>
+
 <template>
   <div>
     <div class="p-4">
@@ -48,8 +62,22 @@ const p = defineProps<{
           <UIcon name="i-heroicons-star-20-solid" variant="outline" />
         </div>
         <div class="flex flex-row ml-auto gap-x-2">
-          <UButton icon="i-heroicons-bookmark-20-solid" variant="outline" />
-          <UButton icon="i-heroicons-book-open-20-solid" variant="outline" />
+          <UButton
+            icon="i-heroicons-arrow-path-rounded-square-20-solid"
+            variant="outline"
+            @click="isOpen = true"
+          />
+          <UModal v-model="isOpen">
+            <UCard>
+              <p class="text-xl text-yellow-500 p-1">確認 情報を初期化します</p>
+              <UButton :loading="loading" @click="reloadBookDataWrapper(book)">
+                更新する
+              </UButton>
+            </UCard>
+          </UModal>
+          <UButton icon="i-heroicons-pencil-square-solid" variant="outline" />
+          <UButton icon="i-heroicons-bookmark" variant="outline" />
+          <UButton icon="i-heroicons-book-open" variant="outline" />
         </div>
       </div>
     </div>

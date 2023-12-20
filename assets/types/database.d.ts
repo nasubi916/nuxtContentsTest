@@ -1,4 +1,4 @@
-type UserISBN = {
+type UserBooks = {
   id: string;
   user_id: string;
   isbn: string;
@@ -18,8 +18,8 @@ type BookData = {
 };
 
 type Payload = {
-  new: UserISBN;
-  old: UserISBN;
+  new: UserBooks;
+  old: UserBooks;
   eventType: "INSERT" | "UPDATE" | "DELETE";
   schema: "public";
   table: "user_isbn";

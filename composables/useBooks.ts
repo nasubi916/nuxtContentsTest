@@ -1,14 +1,14 @@
 export const useBooks = () => {
   const client = useSupabaseClient();
   const user = useSupabaseUser();
-  const userISBNs = ref<UserISBN[]>([]);
-
-  const getUserISBNsData = async (): Promise<UserISBN[]> => {
+  const userISBNs = ref<UserBooks[]>([]);
+  // userISBNsテーブルのデータを取得する
+  const getUserISBNsData = async (): Promise<UserBooks[]> => {
     const { data, error } = await client.from("user_isbn").select("*");
     if (error) throw error;
-    return data as UserISBN[];
+    return data as UserBooks[];
   };
-
+  // openDBにfetchしてbooksに追加する
   const getBooksData = async (ISBNs: string): Promise<BookData[]> => {
     // 1000件以上登録されている場合は1000件までに制限する (openDBのAPI制限)
     if (ISBNs.split(",").length > 1000)
@@ -50,7 +50,6 @@ export const useBooks = () => {
     });
     return booksData;
   };
-
   // subscribeしている情報が変更された時､openDBにfetchしてbooksに追加する
   const handleInserts = (payload: Payload): void => {
     if (payload.eventType === "DELETE") {
@@ -61,8 +60,13 @@ export const useBooks = () => {
     if (payload.eventType === "INSERT") {
       userISBNs.value.push(payload.new);
     }
+    if (payload.eventType === "UPDATE") {
+      userISBNs.value = userISBNs.value.map((book) => {
+        if (book.id === payload.old.id) return payload.new;
+        return book;
+      });
+    }
   };
-
   // supabaseのusers_isbnテーブルの変更をsubscribeする
   const startSubscribe = (): void => {
     client
@@ -80,7 +84,6 @@ export const useBooks = () => {
         if (status === "SUBSCRIBED") console.log("started subscribe!!!");
       });
   };
-
   // user.value?.idをキーにしてデータを登録する
   const addBook = async (bookData: BookData): Promise<void> => {
     const { error } = await client
@@ -94,10 +97,18 @@ export const useBooks = () => {
       .single();
     if (error) throw error;
   };
-
   // データの削除
   const deleteBook = async (id: string) => {
     const { error } = await client.from("user_isbn").delete().eq("id", id);
+    if (error) throw error;
+  };
+  // データの再取得
+  const reloadBook = async (userBooks: UserBooks) => {
+    const bookData = await getBooksData(userBooks.isbn);
+    const { error } = await client
+      .from("user_isbn")
+      .update({ book_data: bookData[0] })
+      .eq("id", userBooks.id);
     if (error) throw error;
   };
 
@@ -108,5 +119,6 @@ export const useBooks = () => {
     startSubscribe,
     addBook,
     deleteBook,
+    reloadBook,
   };
 };
