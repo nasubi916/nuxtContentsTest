@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const { deleteBook } = useBooks();
 const p = defineProps<{
-  book: BookResponse;
+  book: UserISBN;
 }>();
 const isOpen = ref<boolean>(false);
 const loading = ref<boolean>(false);
@@ -28,13 +28,9 @@ const deleteBookWrapper = async (id: string) => {
         class="[writing-mode:vertical-rl] text-cool-900 text-2xl flex justify-center"
       >
         <span class="mb-5 whitespace-nowrap truncate">{{
-          p.book?.summary?.title
+          p.book?.book_data?.title
         }}</span>
-        <span class="whitespace-nowrap">{{
-          p.book?.summary?.author.split(",", 2)[0] +
-            " " +
-            p.book?.summary?.author.split(",", 2)[1] ?? ""
-        }}</span>
+        <span class="whitespace-nowrap">{{ p.book?.book_data?.author }}</span>
       </div>
     </UButton>
     <UModal v-model="isOpen">
@@ -43,11 +39,11 @@ const deleteBookWrapper = async (id: string) => {
           :loading="loading"
           icon="i-heroicons-trash"
           variant="outline"
-          class="float-right"
-          @click="deleteBookWrapper(p.book.onix.recordReference)"
+          class="left-0 top-0"
+          @click="deleteBookWrapper(p.book?.id)"
         />
         <p>
-          {{ book?.onix }}
+          {{ book.book_data }}
         </p>
       </div>
     </UModal>

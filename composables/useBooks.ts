@@ -2,7 +2,6 @@ export const useBooks = () => {
   const client = useSupabaseClient();
   const user = useSupabaseUser();
   const userISBNs = ref<UserISBN[]>([]);
-  const books = ref<BookResponse[]>([]);
 
   const getUserISBNsData = async (): Promise<UserISBN[]> => {
     const { data, error } = await client.from("user_isbn").select("*");
@@ -10,7 +9,7 @@ export const useBooks = () => {
     return data as UserISBN[];
   };
 
-  const getBooksData = async (ISBNs: string): Promise<BookResponse[]> => {
+  const getBooksData = async (ISBNs: string): Promise<BookData[]> => {
     // 1000件以上登録されている場合は1000件までに制限する (openDBのAPI制限)
     if (ISBNs.split(",").length > 1000)
       ISBNs = ISBNs.split(",").slice(0, 1000).join(",");
@@ -22,28 +21,33 @@ export const useBooks = () => {
     });
     if (error.value) throw new Error(error.value.message);
     if (data.value === null) throw new Error("No data");
-    return data.value as BookResponse[];
+    // 本のデータをBookData型に変換する
+    const booksData = data.value.map((book: BookResponse) => {
+      return {
+        isbn: book.onix.recordReference ?? "",
+        title:
+          book.onix.descriptiveDetail.collection.titleDetail.titleElement[0]
+            .titleText.content ?? "",
+        author:
+          book.onix.descriptiveDetail.contributor[0].personName.content ?? "",
+        publisher: book.onix.publishingDetail.publisher.publisherName ?? "",
+        label: book.onix.publishingDetail.imprint.imprintName ?? "",
+        date: book.onix.publishingDetail.publishingDate[0].date ?? "",
+        price: book.onix.productSupply.supplyDetail.price[0].priceAmount ?? 0,
+      };
+    });
+    return booksData;
   };
 
   // subscribeしている情報が変更された時､openDBにfetchしてbooksに追加する
-  const handleInserts = async (payload: Payload): Promise<void> => {
+  const handleInserts = (payload: Payload): void => {
     if (payload.eventType === "DELETE") {
       userISBNs.value = userISBNs.value.filter((book) => {
         return book.id !== payload.old.id;
       });
-      return;
     }
     if (payload.eventType === "INSERT") {
-      const { data, error } = await useFetch("/api/openDB", {
-        method: "GET",
-        params: {
-          isbn: payload.new.isbn,
-        },
-      });
-      if (error.value) throw error.value;
-      if (data.value === null) throw new Error("No data");
       userISBNs.value.push(payload.new);
-      books.value.push(...data.value);
     }
   };
 
@@ -78,11 +82,15 @@ export const useBooks = () => {
     )
       return;
 
+    // openDBから本のデータを取得
+    const booksData = await getBooksData(newIsbn);
+
     const { error } = await client
       .from("user_isbn")
       .insert({
         user_id: user.value?.id,
         isbn: newIsbn,
+        book_data: booksData[0],
       })
       .select("id,user_id,isbn,created_at")
       .single();
@@ -97,7 +105,6 @@ export const useBooks = () => {
 
   return {
     userISBNs,
-    books,
     getUserISBNsData,
     getBooksData,
     startSubscribe,
