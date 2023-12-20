@@ -14,6 +14,7 @@ type BookData = {
   label: string;
   date: string;
   price: number;
+  page: number;
 };
 
 type Payload = {

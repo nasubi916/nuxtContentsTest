@@ -22,7 +22,8 @@ export const useBooks = () => {
     if (error.value) throw new Error(error.value.message);
     if (data.value === null) throw new Error("No data");
     // 本のデータをBookData型に変換する
-    const booksData = data.value.map((book: BookResponse) => {
+    console.log(data.value);
+    const booksData = data.value.map((book: BookResponse): BookData => {
       let author: string =
         book.onix.DescriptiveDetail.Contributor[0].PersonName.content;
       const authorArray = author.split(",");
@@ -34,12 +35,14 @@ export const useBooks = () => {
           book.onix.DescriptiveDetail.TitleDetail.TitleElement.TitleText
             .content,
         author,
-        publisher: book.onix.PublishingDetail.publisher?.publisherName ?? "",
-        label: book.onix.PublishingDetail.Imprint.ImprintName,
+        publisher: book.onix.PublishingDetail.Imprint.ImprintName,
+        label: book.summary.series ?? "",
         date: book.onix.PublishingDetail.PublishingDate[0].Date,
         price: book.onix.ProductSupply.SupplyDetail.Price[0].PriceAmount,
+        page: book.onix.DescriptiveDetail?.extent?.[0]?.extentValue ?? 0,
       };
     });
+    console.log(booksData);
     return booksData;
   };
 

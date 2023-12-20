@@ -31,8 +31,9 @@ const isSidebarOpen = ref<boolean>(false);
     <USlideover v-model="isSidebarOpen">
       <div class="p-4 flex-1">
         色々いじれるゾーン
-        <BookSearcher />
         <BookAdder />
+        <UDivider class="my-12" />
+        <BookSearcher />
         setting...
       </div>
     </USlideover>
