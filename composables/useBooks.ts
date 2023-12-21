@@ -85,14 +85,14 @@ export const useBooks = () => {
       });
   };
   // user.value?.idをキーにしてデータを登録する
-  const addBook = async (bookData: BookData): Promise<void> => {
+  const addBook = async (newUserBook: UserBook): Promise<void> => {
     const { error } = await client
       .from("user_isbn")
       .insert({
         user_id: user.value?.id,
-        isbn: bookData.isbn,
-        book_data: bookData,
-        state: "yet",
+        isbn: newUserBook.isbn,
+        book_data: newUserBook.book_data,
+        state: newUserBook.state,
       })
       .select("id,user_id,isbn,created_at")
       .single();
