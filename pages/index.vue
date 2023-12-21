@@ -12,9 +12,6 @@
         </UButton>
       </UCard>
     </div>
-    <img
-      src="https://source.unsplash.com/random/1920x1080"
-      class="h-screen w-screen"
-    />
+    <img src="https://source.unsplash.com/random" class="h-screen w-screen" />
   </div>
 </template>
