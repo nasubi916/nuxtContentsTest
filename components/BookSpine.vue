@@ -36,7 +36,7 @@ const deleteBookWrapper = async (id: string) => {
       @click="isOpen = true"
     >
       <div
-        class="[writing-mode:vertical-rl] flex flex-row max-h-[450px] min-h-[300px]"
+        class="[writing-mode:vertical-rl] flex flex-row max-h-[500px] min-h-[500px]"
       >
         <span
           class="mt-3 mb-5 truncate font-bold text-2xl max-w-fit max-h-fit"
@@ -49,15 +49,17 @@ const deleteBookWrapper = async (id: string) => {
         </span>
       </div>
     </UButton>
-    <UModal v-model="isOpen">
-      <BookModal :book="p.book">
-        <UButton
-          :loading="loading"
-          icon="i-heroicons-trash"
-          variant="outline"
-          @click="deleteBookWrapper(p.book.id)"
-        />
-      </BookModal>
-    </UModal>
+    <div class="flex items-center">
+      <UModal v-model="isOpen">
+        <BookModal :book="p.book">
+          <UButton
+            :loading="loading"
+            icon="i-heroicons-trash"
+            variant="outline"
+            @click="deleteBookWrapper(p.book.id)"
+          />
+        </BookModal>
+      </UModal>
+    </div>
   </div>
 </template>

@@ -29,13 +29,20 @@ const isSidebarOpen = ref<boolean>(false);
       <AccountMenu class="mr-2" />
     </nav>
     <USlideover v-model="isSidebarOpen">
-      <div class="p-4 flex-1">
+      <UCard class="p-4 flex-1">
+        <template #header>
+          <div class="flex flex-row justify-end">
+            <UButton variant="outline" @click="isSidebarOpen = false">
+              <UIcon name="i-heroicons-x-mark-solid" />
+            </UButton>
+          </div>
+        </template>
         <BookAdder />
         <UDivider class="mt-3" />
         <BookSearcher />
         <UDivider class="mt-3" />
         <ConfigMenu />
-      </div>
+      </UCard>
     </USlideover>
     <slot />
   </div>

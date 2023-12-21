@@ -12,8 +12,10 @@ onMounted(async () => {
 
 <template>
   <div class="dark">
-    <div class="p-10"></div>
-    <div class="bottom-0 flex flex-row items-end gap-1">
+    <div
+      class="h-screen bottom-0 flex flex-row items-end gap-1 overflow-x-scroll"
+    >
+      <div class="p-10"></div>
       <div v-for="book in userISBNs" :key="book.id">
         <UChip
           :show="isChip"
