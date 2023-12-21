@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const push = usePush();
 const { getBooksData, addBook, getUserISBNsData } = useBooks();
+const { defaultState } = useConfig();
 const inputISBN = ref<string>();
 const newUserISBN = ref<UserBook>();
 const loading = ref<boolean>(false);
@@ -26,7 +27,7 @@ const addBookWrapper = async (newISBN: string | undefined) => {
     id: "",
     user_id: "",
     isbn: newISBN,
-    state: "yet",
+    state: defaultState.value,
     book_data: (await getBooksData(newISBN))[0],
     created_at: "",
   };
@@ -34,8 +35,8 @@ const addBookWrapper = async (newISBN: string | undefined) => {
   isModal.value = true;
 };
 
-const confirm = async (bookData: BookData) => {
-  await addBook(bookData);
+const confirm = async (newUserBook: UserBook) => {
+  await addBook(newUserBook);
   push.success({ message: "本を登録しました" });
   isModal.value = false;
   inputISBN.value = undefined;
@@ -44,41 +45,55 @@ const confirm = async (bookData: BookData) => {
 </script>
 
 <template>
+  add...
   <div class="dark flex justify-end">
-    <form
-      :disable="loading"
-      class="flex flex-row"
-      @submit.prevent="addBookWrapper(inputISBN)"
-    >
-      <UFormGroup label="ISBN" required>
-        <UInput
-          v-model="inputISBN"
-          variant="outline"
-          placeholder="input ISBN"
-          autocomplete="off"
-          name="newIsbn"
-          :ui="{ icon: { trailing: { pointer: '' } } }"
-        >
-          <template #trailing>
-            <UButton
-              v-show="inputISBN !== undefined"
-              variant="link"
-              icon="i-heroicons-x-mark-20-solid"
-              :padded="false"
-              @click="inputISBN = undefined"
-            />
-          </template>
-        </UInput>
-      </UFormGroup>
-      <UButton
-        :loading="loading"
-        type="submit"
-        class="bg-blue-400 p-2 rounded-lg flex flex-row items-center"
+    <span class="mr-3">{{ defaultState }}</span>
+    <div class="flex flex-col gap-3">
+      <form
+        :disable="loading"
+        class="flex flex-row"
+        @submit.prevent="addBookWrapper(inputISBN)"
       >
-        <span>本を登録</span>
-      </UButton>
-      <!-- <BarcodeReader /> -->
-    </form>
+        <UFormGroup label="ISBN" required>
+          <UInput
+            v-model="inputISBN"
+            variant="outline"
+            placeholder="input ISBN"
+            autocomplete="off"
+            name="newIsbn"
+            :ui="{ icon: { trailing: { pointer: '' } } }"
+          >
+            <template #trailing>
+              <UButton
+                v-show="inputISBN !== undefined"
+                variant="link"
+                icon="i-heroicons-x-mark-20-solid"
+                :padded="false"
+                @click="inputISBN = undefined"
+              />
+            </template>
+          </UInput>
+        </UFormGroup>
+        <UButton
+          :loading="loading"
+          type="submit"
+          class="bg-blue-400 p-2 rounded-lg flex flex-row items-center"
+        >
+          <span>本を登録</span>
+        </UButton>
+        <!-- <BarcodeReader /> -->
+      </form>
+      <div class="flex">
+        <URadio v-model="defaultState" label="積読" value="yet" class="mr-3" />
+        <URadio
+          v-model="defaultState"
+          label="読書中"
+          value="still"
+          class="mr-3"
+        />
+        <URadio v-model="defaultState" label="読了" value="done" />
+      </div>
+    </div>
     <UModal v-model="isModal">
       <BookModal v-if="newUserISBN" :book="newUserISBN">
         <div class="flex justify-end">
@@ -87,7 +102,7 @@ const confirm = async (bookData: BookData) => {
             icon="i-heroicons-check-20-solid"
             variant="outline"
             class="right-0 bottom-0"
-            @click="confirm(newUserISBN.book_data)"
+            @click="confirm(newUserISBN)"
           />
         </div>
       </BookModal>

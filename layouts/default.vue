@@ -30,11 +30,10 @@ const isSidebarOpen = ref<boolean>(false);
     </nav>
     <USlideover v-model="isSidebarOpen">
       <div class="p-4 flex-1">
-        色々いじれるゾーン
         <BookAdder />
-        <UDivider class="mt-12" />
+        <UDivider class="mt-3" />
         <BookSearcher />
-        <UDivider class="mt-12" />
+        <UDivider class="mt-3" />
         <ConfigMenu />
       </div>
     </USlideover>
