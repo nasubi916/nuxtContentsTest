@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const { deleteBook } = useBooks();
 const p = defineProps<{
-  book: UserBooks;
+  book: UserBook;
 }>();
 const isOpen = ref<boolean>(false);
 const loading = ref<boolean>(false);

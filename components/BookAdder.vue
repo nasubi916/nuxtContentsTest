@@ -2,7 +2,7 @@
 const push = usePush();
 const { getBooksData, addBook, getUserISBNsData } = useBooks();
 const inputISBN = ref<string>();
-const newUserISBN = ref<UserBooks>();
+const newUserISBN = ref<UserBook>();
 const loading = ref<boolean>(false);
 const isModal = ref<boolean>(false);
 
@@ -80,13 +80,15 @@ const confirm = async (bookData: BookData) => {
     </form>
     <UModal v-model="isModal">
       <BookModal v-if="newUserISBN" :book="newUserISBN">
-        <UButton
-          :loading="loading"
-          icon="i-heroicons-check-20-solid"
-          variant="outline"
-          class="right-0 bottom-0"
-          @click="confirm(newUserISBN.book_data)"
-        />
+        <div class="flex justify-end">
+          <UButton
+            :loading="loading"
+            icon="i-heroicons-check-20-solid"
+            variant="outline"
+            class="right-0 bottom-0"
+            @click="confirm(newUserISBN.book_data)"
+          />
+        </div>
       </BookModal>
     </UModal>
   </div>

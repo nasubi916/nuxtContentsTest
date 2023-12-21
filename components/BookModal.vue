@@ -1,27 +1,27 @@
 <script lang="ts" setup>
 const { reloadBook, updateBook } = useBooks();
 const p = defineProps<{
-  book: UserBooks;
+  book: UserBook;
 }>();
 
 const isOpen = ref<boolean>(false);
 const isEdit = ref<boolean>(false);
 const loading = ref<boolean>(false);
-const inputData = ref(p.book.book_data);
+const state = ref(p.book.book_data);
 
-const reloadBookDataWrapper = async (userBooks: UserBooks) => {
+const reloadBookDataWrapper = async (userBooks: UserBook) => {
   loading.value = true;
   await reloadBook(userBooks);
   setTimeout(() => {
     isOpen.value = false;
     loading.value = false;
-    inputData.value = p.book.book_data;
+    state.value = p.book.book_data;
   }, 1000);
 };
 const updateData = async () => {
   loading.value = true;
   const updateBookData = p.book;
-  updateBookData.book_data = inputData.value;
+  updateBookData.book_data = state.value;
   await updateBook(updateBookData);
   setTimeout(() => {
     isEdit.value = false;
@@ -34,7 +34,7 @@ const updateData = async () => {
   <div>
     <div class="p-4">
       <slot />
-        <div class="p-1"></div>
+      <div class="p-1"></div>
       <div class="flex">
         <img
           src="https://picsum.photos/200/300"
@@ -54,22 +54,23 @@ const updateData = async () => {
                 >出版社: {{ p.book.book_data.publisher }}</span
               >
               <span class="text-lg">出版日: {{ p.book.book_data.date }}</span>
-              <span class="text-lg">定価: {{ p.book.book_data.price }}円</span>
+              <span v-if="p.book.book_data.price" class="text-lg"
+                >定価: {{ p.book.book_data.price }}円</span
+              >
+              <span v-else class="text-lg">定価: 不明</span>
             </div>
-            <span v-if="p.book.book_data.page === 0" class="text-xl"
-              >ページ数: 不明</span
-            >
-            <span v-else class="text-xl"
-              >ページ数: {{ p.book.book_data.page }}ページ</span
-            >
+            <span v-if="p.book.book_data.page" class="text-xl">
+              ページ数: {{ p.book.book_data.page }}ページ
+            </span>
+            <span v-else class="text-xl"> ページ数: 不明 </span>
             <span class="text-sm">ISBN: {{ p.book.book_data.isbn }}</span>
           </div>
           <div v-else class="flex flex-col gap-2">
-            <UForm :state="inputData" @submit="updateData">
+            <UForm :state="state" @submit="updateData">
               <div class="flex flex-row">
                 <div>
                   <UInput
-                    v-model="inputData.title"
+                    v-model="state.title"
                     color="primary"
                     variant="outline"
                     placeholder="title"
@@ -78,7 +79,7 @@ const updateData = async () => {
                     size="lg"
                   />
                   <UInput
-                    v-model="inputData.author"
+                    v-model="state.author"
                     color="primary"
                     variant="outline"
                     placeholder="author"
@@ -88,7 +89,7 @@ const updateData = async () => {
                   />
                   <div class="flex flex-col my-5">
                     <UInput
-                      v-model="inputData.label"
+                      v-model="state.label"
                       color="primary"
                       variant="outline"
                       placeholder="label"
@@ -97,7 +98,7 @@ const updateData = async () => {
                       size="xs"
                     />
                     <UInput
-                      v-model="inputData.publisher"
+                      v-model="state.publisher"
                       color="primary"
                       variant="outline"
                       placeholder="publisher"
@@ -106,7 +107,7 @@ const updateData = async () => {
                       size="xs"
                     />
                     <UInput
-                      v-model="inputData.date"
+                      v-model="state.date"
                       color="primary"
                       variant="outline"
                       placeholder="date"
@@ -115,7 +116,7 @@ const updateData = async () => {
                       size="xs"
                     />
                     <UInput
-                      v-model="inputData.price"
+                      v-model="state.price"
                       color="primary"
                       variant="outline"
                       placeholder="price"
@@ -125,7 +126,7 @@ const updateData = async () => {
                     />
                   </div>
                   <UInput
-                    v-model="inputData.page"
+                    v-model="state.page"
                     color="primary"
                     variant="outline"
                     placeholder="page"
@@ -134,7 +135,7 @@ const updateData = async () => {
                     size="sm"
                   />
                   <UInput
-                    v-model="inputData.isbn"
+                    v-model="state.isbn"
                     color="primary"
                     variant="outline"
                     placeholder="isbn"
@@ -172,6 +173,11 @@ const updateData = async () => {
             variant="outline"
             @click="isOpen = true"
           />
+          <UButton
+            icon="i-heroicons-pencil-square-solid"
+            variant="outline"
+            @click="isEdit = !isEdit"
+          />
           <UModal v-model="isOpen">
             <UCard>
               <p class="text-xl text-yellow-500 p-1">確認 情報を初期化します</p>
@@ -180,11 +186,6 @@ const updateData = async () => {
               </UButton>
             </UCard>
           </UModal>
-          <UButton
-            icon="i-heroicons-pencil-square-solid"
-            variant="outline"
-            @click="isEdit = !isEdit"
-          />
           <UButton icon="i-heroicons-bookmark" variant="outline" />
           <UButton icon="i-heroicons-book-open" variant="outline" />
         </div>
