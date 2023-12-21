@@ -23,6 +23,7 @@ export const useBooks = () => {
     if (data.value === null) throw new Error("No data");
     // 本のデータをBookData型に変換する
     const booksData = data.value.map((book: BookResponse): BookData => {
+      console.log(book);
       // 著者名の整形
       let author: string =
         book.onix.DescriptiveDetail.Contributor[0].PersonName.content;
@@ -33,7 +34,7 @@ export const useBooks = () => {
       let date: string =
         book.onix?.PublishingDetail?.PublishingDate[0]?.Date ?? "";
       date = date.slice(0, 4) + "/" + date.slice(4, 6) + "/" + date.slice(6, 8);
-      if (date === "//") date = "不明";
+      if (date === "//") date = "";
       return {
         isbn: book.onix.RecordReference,
         title:
@@ -46,6 +47,7 @@ export const useBooks = () => {
         price:
           book.onix?.ProductSupply?.SupplyDetail?.Price[0]?.PriceAmount ?? 0,
         page: book.onix.DescriptiveDetail?.extent?.[0]?.extentValue ?? 0,
+        cover: "https://placehold.jp/105x148.png",
       };
     });
     return booksData;

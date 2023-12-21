@@ -87,16 +87,16 @@ type Onix = {
       textType: string;
       contentAudience: string;
     }[];
-    supportingResource: {
-      resourceContentType: string; // ISBN code
-      resourceMode: string;
-      contentAudience: string;
-      resourceVersion: {
-        resourceLink: string; // Image path
-        resourceForm: string;
-        resourceVersionFeature: {
-          resourceVersionFeatureType: string;
-          featureValue: string;
+    supportingResource?: {
+      resourceContentType?: string; // ISBN code
+      resourceMode?: string;
+      contentAudience?: string;
+      resourceVersion: ?{
+        resourceLink?: string; // Image path
+        resourceForm?: string;
+        resourceVersionFeature?: {
+          resourceVersionFeatureType?: string;
+          featureValue?: string;
         }[];
       }[];
     }[];

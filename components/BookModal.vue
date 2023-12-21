@@ -9,6 +9,21 @@ const isOpen = ref<boolean>(false);
 const isEdit = ref<boolean>(false);
 const loading = ref<boolean>(false);
 const state = ref(JSON.parse(JSON.stringify(p.book)));
+const cover = ref<string | undefined>();
+
+// 頭が痛くなるコード
+onMounted(async () => {
+  const { data, error } = await useFetch("/api/image", {
+    method: "GET",
+    params: {
+      isbn: p.book.book_data.isbn,
+    },
+  });
+  if (error.value) throw new Error(error.value.message);
+  if (data.value) {
+    cover.value = data.value;
+  }
+});
 
 const reloadBookDataWrapper = async (userBooks: UserBook) => {
   loading.value = true;
@@ -37,9 +52,12 @@ const updateData = async () => {
       <div class="flex">
         <div class="min-w-48 max-w-48 w-full">
           <img
-            src="https://picsum.photos/200/300"
-            alt="book"
-            class="mb-1 h-72 rounded-md shadow-md"
+            :src="
+              cover !== undefined
+                ? `https://iss.ndl.go.jp/thumbnail/${p.book.book_data.isbn}`
+                : `${p.book.book_data.cover}`
+            "
+            class="mb-1 w-full h-auto rounded-md shadow-md"
           />
         </div>
         <div class="p-3"></div>
