@@ -92,6 +92,7 @@ export const useBooks = () => {
         user_id: user.value?.id,
         isbn: bookData.isbn,
         book_data: bookData,
+        state: "yet",
       })
       .select("id,user_id,isbn,created_at")
       .single();
@@ -116,7 +117,10 @@ export const useBooks = () => {
     if (userBooks.id === "") return;
     const { error } = await client
       .from("user_isbn")
-      .update({ book_data: userBooks.book_data })
+      .update({
+        book_data: userBooks.book_data,
+        state: userBooks.state,
+      })
       .eq("id", userBooks.id);
     if (error) throw error;
   };

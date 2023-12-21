@@ -2,8 +2,9 @@ type UserBook = {
   id: string;
   user_id: string;
   isbn: string;
-  created_at: string;
+  state: string;
   book_data: BookData;
+  created_at: string;
 };
 
 type BookData = {

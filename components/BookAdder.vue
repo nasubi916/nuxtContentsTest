@@ -24,8 +24,9 @@ const addBookWrapper = async (newISBN: string | undefined) => {
   loading.value = true;
   newUserISBN.value = {
     id: "",
-    isbn: newISBN,
     user_id: "",
+    isbn: newISBN,
+    state: "yet",
     book_data: (await getBooksData(newISBN))[0],
     created_at: "",
   };

@@ -32,9 +32,10 @@ const isSidebarOpen = ref<boolean>(false);
       <div class="p-4 flex-1">
         色々いじれるゾーン
         <BookAdder />
-        <UDivider class="my-12" />
+        <UDivider class="mt-12" />
         <BookSearcher />
-        setting...
+        <UDivider class="mt-12" />
+        <ConfigMenu />
       </div>
     </USlideover>
     <slot />

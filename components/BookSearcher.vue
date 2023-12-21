@@ -9,18 +9,21 @@ const todoStatus = [
 </script>
 
 <template>
-  <div class="flex items-center justify-between gap-3 px-4 pt-3">
-    <UInput
-      v-model="search"
-      icon="i-heroicons-magnifying-glass-20-solid"
-      placeholder="Search..."
-    />
-    <USelectMenu
-      v-model="selectedStatus"
-      :options="todoStatus"
-      multiple
-      placeholder="filter"
-      class="w-40"
-    />
+  <div>
+    search...
+    <div class="flex items-center justify-between gap-3 px-4 pt-3">
+      <UInput
+        v-model="search"
+        icon="i-heroicons-magnifying-glass-20-solid"
+        placeholder="Search..."
+      />
+      <USelectMenu
+        v-model="selectedStatus"
+        :options="todoStatus"
+        multiple
+        placeholder="filter"
+        class="w-40"
+      />
+    </div>
   </div>
 </template>
