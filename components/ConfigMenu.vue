@@ -7,7 +7,7 @@ const { isChip, chipColor } = useConfig();
 <template>
   <div>
     setting...
-    <div class="flex flex-col">
+    <div class="flex flex-col mt-3">
       <UCard>
         {{ isChip }}
         {{ chipColor }}
