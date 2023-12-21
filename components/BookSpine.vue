@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const { deleteBook } = useBooks();
 const p = defineProps<{
-  book: UserBooks;
+  book: UserBook;
 }>();
 const isOpen = ref<boolean>(false);
 const loading = ref<boolean>(false);
@@ -29,9 +29,10 @@ const deleteBookWrapper = async (id: string) => {
 <template>
   <div v-if="p.book">
     <UButton
+      color=""
       label="Open"
-      variant="solid"
-      class="w-12 text-center"
+      variant="soft"
+      class="w-12 bg-primary text-center"
       @click="isOpen = true"
     >
       <div

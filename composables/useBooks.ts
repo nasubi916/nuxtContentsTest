@@ -1,12 +1,12 @@
 export const useBooks = () => {
   const client = useSupabaseClient();
   const user = useSupabaseUser();
-  const userISBNs = ref<UserBooks[]>([]);
+  const userISBNs = ref<UserBook[]>([]);
   // userISBNsテーブルのデータを取得する
-  const getUserISBNsData = async (): Promise<UserBooks[]> => {
+  const getUserISBNsData = async (): Promise<UserBook[]> => {
     const { data, error } = await client.from("user_isbn").select("*");
     if (error) throw error;
-    return data as UserBooks[];
+    return data as UserBook[];
   };
   // openDBにfetchしてbooksに追加する
   const getBooksData = async (ISBNs: string): Promise<BookData[]> => {
@@ -92,6 +92,7 @@ export const useBooks = () => {
         user_id: user.value?.id,
         isbn: bookData.isbn,
         book_data: bookData,
+        state: "yet",
       })
       .select("id,user_id,isbn,created_at")
       .single();
@@ -103,7 +104,7 @@ export const useBooks = () => {
     if (error) throw error;
   };
   // データの再取得
-  const reloadBook = async (userBooks: UserBooks) => {
+  const reloadBook = async (userBooks: UserBook) => {
     const bookData = await getBooksData(userBooks.isbn);
     const { error } = await client
       .from("user_isbn")
@@ -112,10 +113,14 @@ export const useBooks = () => {
     if (error) throw error;
   };
   // データの更新
-  const updateBook = async (userBooks: UserBooks) => {
+  const updateBook = async (userBooks: UserBook) => {
+    if (userBooks.id === "") return;
     const { error } = await client
       .from("user_isbn")
-      .update({ book_data: userBooks.book_data })
+      .update({
+        book_data: userBooks.book_data,
+        state: userBooks.state,
+      })
       .eq("id", userBooks.id);
     if (error) throw error;
   };

@@ -1,28 +1,27 @@
 <script lang="ts" setup>
 const { reloadBook, updateBook } = useBooks();
+const { chipColor } = useConfig();
 const p = defineProps<{
-  book: UserBooks;
+  book: UserBook;
 }>();
 
 const isOpen = ref<boolean>(false);
 const isEdit = ref<boolean>(false);
 const loading = ref<boolean>(false);
-const inputData = ref(p.book.book_data);
+const state = ref(JSON.parse(JSON.stringify(p.book)));
 
-const reloadBookDataWrapper = async (userBooks: UserBooks) => {
+const reloadBookDataWrapper = async (userBooks: UserBook) => {
   loading.value = true;
   await reloadBook(userBooks);
   setTimeout(() => {
     isOpen.value = false;
     loading.value = false;
-    inputData.value = p.book.book_data;
+    state.value = p.book;
   }, 1000);
 };
 const updateData = async () => {
   loading.value = true;
-  const updateBookData = p.book;
-  updateBookData.book_data = inputData.value;
-  await updateBook(updateBookData);
+  await updateBook(state.value);
   setTimeout(() => {
     isEdit.value = false;
     loading.value = false;
@@ -34,42 +33,94 @@ const updateData = async () => {
   <div>
     <div class="p-4">
       <slot />
-        <div class="p-1"></div>
+      <div class="p-1"></div>
       <div class="flex">
-        <img
-          src="https://picsum.photos/200/300"
-          alt="book"
-          class="mb-1 w-48 h-72 rounded-md shadow-md"
-        />
+        <div class="min-w-48 max-w-48 w-full">
+          <img
+            src="https://picsum.photos/200/300"
+            alt="book"
+            class="mb-1 h-72 rounded-md shadow-md"
+          />
+        </div>
         <div class="p-3"></div>
-        <div class="flex flex-col justify-between">
+        <div class="flex flex-col justify-between min-w-[50%]">
           <div v-if="!isEdit" class="flex flex-col gap-2">
+            <div>
+              <span
+                v-if="p.book.state === `yet`"
+                :class="`bg-${chipColor.yet}-400`"
+                class="p-1 rounded-lg"
+                >積読</span
+              >
+              <span
+                v-if="p.book.state === `still`"
+                :class="`bg-${chipColor.still}-400`"
+                class="p-1 rounded-lg"
+                >読書中</span
+              >
+              <span
+                v-if="p.book.state === `done`"
+                :class="`bg-${chipColor.done}-400`"
+                class="p-1 rounded-lg"
+                >読了</span
+              >
+            </div>
             <span class="text-3xl">{{ p.book.book_data.title }}</span>
-            <span class="text-xl">著者: {{ p.book.book_data.author }}</span>
+            <span class="text-xl"
+              ><span class="text-gray-400 text-base">著者: </span>
+              {{ p.book.book_data.author }}</span
+            >
             <div class="flex flex-col my-5">
               <span class="text-lg"
-                >レーベル: {{ p.book.book_data.label }}</span
+                ><span class="text-gray-400 text-base">レーベル: </span>
+                {{ p.book.book_data.label }}</span
               >
               <span class="text-lg"
-                >出版社: {{ p.book.book_data.publisher }}</span
+                ><span class="text-gray-400 text-base">出版社: </span>
+                {{ p.book.book_data.publisher }}</span
               >
-              <span class="text-lg">出版日: {{ p.book.book_data.date }}</span>
-              <span class="text-lg">定価: {{ p.book.book_data.price }}円</span>
+              <span class="text-lg"
+                ><span class="text-gray-400 text-base">出版日: </span
+                >{{ p.book.book_data.date }}</span
+              >
+              <span v-if="p.book.book_data.price" class="text-lg"
+                ><span class="text-gray-400 text-base">定価: </span
+                >{{ p.book.book_data.price }}円</span
+              >
+              <span v-else class="text-lg"
+                ><span class="text-gray-400 text-base">定価: </span> 不明</span
+              >
             </div>
-            <span v-if="p.book.book_data.page === 0" class="text-xl"
-              >ページ数: 不明</span
-            >
+            <span v-if="p.book.book_data.page" class="text-xl"
+              ><span class="text-gray-400 text-base">ページ数: </span>
+              {{ p.book.book_data.page }}ページ
+            </span>
             <span v-else class="text-xl"
-              >ページ数: {{ p.book.book_data.page }}ページ</span
+              ><span class="text-gray-400 text-base">ページ数: </span> 不明
+            </span>
+            <span class="text-sm"
+              ><span class="text-gray-400 text-base">ISBN: </span>
+              {{ p.book.book_data.isbn }}</span
             >
-            <span class="text-sm">ISBN: {{ p.book.book_data.isbn }}</span>
           </div>
           <div v-else class="flex flex-col gap-2">
-            <UForm :state="inputData" @submit="updateData">
+            <UForm :state="state" @submit="updateData">
+              <div>
+                <USelect
+                  v-model="state.state"
+                  :options="[
+                    { label: `積読`, value: `yet` },
+                    { label: `読書中`, value: `still` },
+                    { label: `読了`, value: `done` },
+                  ]"
+                  name="state"
+                  size="sm"
+                />
+              </div>
               <div class="flex flex-row">
                 <div>
                   <UInput
-                    v-model="inputData.title"
+                    v-model="state.book_data.title"
                     color="primary"
                     variant="outline"
                     placeholder="title"
@@ -78,7 +129,7 @@ const updateData = async () => {
                     size="lg"
                   />
                   <UInput
-                    v-model="inputData.author"
+                    v-model="state.book_data.author"
                     color="primary"
                     variant="outline"
                     placeholder="author"
@@ -88,7 +139,7 @@ const updateData = async () => {
                   />
                   <div class="flex flex-col my-5">
                     <UInput
-                      v-model="inputData.label"
+                      v-model="state.book_data.label"
                       color="primary"
                       variant="outline"
                       placeholder="label"
@@ -97,7 +148,7 @@ const updateData = async () => {
                       size="xs"
                     />
                     <UInput
-                      v-model="inputData.publisher"
+                      v-model="state.book_data.publisher"
                       color="primary"
                       variant="outline"
                       placeholder="publisher"
@@ -106,7 +157,7 @@ const updateData = async () => {
                       size="xs"
                     />
                     <UInput
-                      v-model="inputData.date"
+                      v-model="state.book_data.date"
                       color="primary"
                       variant="outline"
                       placeholder="date"
@@ -115,7 +166,7 @@ const updateData = async () => {
                       size="xs"
                     />
                     <UInput
-                      v-model="inputData.price"
+                      v-model="state.book_data.price"
                       color="primary"
                       variant="outline"
                       placeholder="price"
@@ -125,7 +176,7 @@ const updateData = async () => {
                     />
                   </div>
                   <UInput
-                    v-model="inputData.page"
+                    v-model="state.book_data.page"
                     color="primary"
                     variant="outline"
                     placeholder="page"
@@ -134,7 +185,7 @@ const updateData = async () => {
                     size="sm"
                   />
                   <UInput
-                    v-model="inputData.isbn"
+                    v-model="state.book_data.isbn"
                     color="primary"
                     variant="outline"
                     placeholder="isbn"
@@ -172,6 +223,11 @@ const updateData = async () => {
             variant="outline"
             @click="isOpen = true"
           />
+          <UButton
+            icon="i-heroicons-pencil-square-solid"
+            variant="outline"
+            @click="isEdit = !isEdit"
+          />
           <UModal v-model="isOpen">
             <UCard>
               <p class="text-xl text-yellow-500 p-1">確認 情報を初期化します</p>
@@ -180,11 +236,6 @@ const updateData = async () => {
               </UButton>
             </UCard>
           </UModal>
-          <UButton
-            icon="i-heroicons-pencil-square-solid"
-            variant="outline"
-            @click="isEdit = !isEdit"
-          />
           <UButton icon="i-heroicons-bookmark" variant="outline" />
           <UButton icon="i-heroicons-book-open" variant="outline" />
         </div>
