@@ -96,7 +96,7 @@ export const useBooks = () => {
         book_data: newUserBook.book_data,
         state: newUserBook.state,
       })
-      .select("id,user_id,isbn,created_at")
+      .select("*")
       .single();
     if (error) throw error;
   };
