@@ -14,6 +14,8 @@
 - 本のsearch
 - 本のsort(登録順､著者順､出版社順､自由)
 - Filter機能
+## 動画
+![test](https://github.com/nasubi916/nuxtContentsTest/assets/104073343/d4be4521-0db5-44e3-88f8-9927a5306a48)
 
 ## 目標
 - Supabaseを使ってみる
