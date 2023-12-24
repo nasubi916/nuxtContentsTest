@@ -36,7 +36,7 @@ sequenceDiagram
     Note right of line_2: signInWithOAuth
     line_3 ->> line_3: BlackBoxな処理
     line_3 -->> line_2: user_idが返される
-    Note right of line_2: redirectTo( /confirm
+    Note left of line_3: redirectTo( /confirm
   end
   line_2 ->> line_1: user_idを送る
   activate line_2
